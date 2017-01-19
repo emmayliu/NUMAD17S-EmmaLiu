@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <TextView
-        android:text="aboutMEActivity"
+        android:text="Emma Yujiao Liu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:id="@+id/name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:text="liu.yuji@husky.neu.edu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/email"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:text="2nd year MS in Computer Science"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/program"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="345dp"
+        app:srcCompat="@mipmap/me"
+        android:id="@+id/imageView"
+        android:layout_weight="0.45" />
+
+    <TextView
+        android:text="990003557343494"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/IMEI"
+        android:layout_weight="0.38"
+        android:textAlignment="center"
+        android:textStyle="normal|bold"
+        android:fontFamily="sans-serif" />
+
 </LinearLayout>
