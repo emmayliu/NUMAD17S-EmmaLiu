@@ -24,7 +24,8 @@
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:id="@+id/generateError"
-        android:text="@string/button_error" />
+        android:text="@string/button_error"
+        android:onClick="getError"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
