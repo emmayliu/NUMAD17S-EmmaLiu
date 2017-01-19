@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-
     public void getError(View v) {
         throw new RuntimeException("This is a crash");
     }
