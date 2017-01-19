@@ -15,9 +15,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void buttonClick(View view) {
+    public void about_button_Click(View view) {
         Intent intent = new Intent(MainActivity.this, AboutMe.class);
         startActivity(intent);
     }
-    
+
+    public void clickQuit(View v) {
+        finish();
+    }
+
 }

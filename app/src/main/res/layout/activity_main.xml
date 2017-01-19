@@ -18,7 +18,7 @@
         android:id="@+id/about"
         android:textAllCaps="false"
         android:text="@string/button_about"
-        android:onClick="buttonClick"/>
+        android:onClick="about_button_Click"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,5 +71,6 @@
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:id="@+id/quit"
-        android:text="@string/button_quit" />
+        android:text="@string/button_quit"
+        android:onClick="clickQuit"/>
 </LinearLayout>
