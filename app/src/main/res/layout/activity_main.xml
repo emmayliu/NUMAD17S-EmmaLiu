@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/about"
         android:textAllCaps="false"
-        android:text="@string/button_about" />
+        android:text="@string/button_about"
+        android:onClick="buttonClick"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
