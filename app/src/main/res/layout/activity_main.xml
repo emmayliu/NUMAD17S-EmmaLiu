@@ -24,7 +24,7 @@
             android:id="@+id/about"
             android:textAllCaps="false"
             android:text="@string/button_about"
-            android:onClick="about_button_Click"/>
+            android:onClick="about_button_click"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void about_button_Click(View view) {
+    public void about_button_click(View view) {
         Intent intent = new Intent(MainActivity.this, AboutMe.class);
         startActivity(intent);
     }
