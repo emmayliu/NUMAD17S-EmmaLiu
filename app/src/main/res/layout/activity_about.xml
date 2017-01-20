@@ -51,10 +51,9 @@
             android:layout_centerHorizontal="true" />
 
         <TextView
-            android:text="@string/phoneIMEI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView3"
+            android:id="@+id/phoneId"
             tools:layout_centerVertical="true"
             android:paddingTop="0dp"
             android:typeface="monospace"
