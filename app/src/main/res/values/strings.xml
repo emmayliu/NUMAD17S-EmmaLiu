@@ -13,5 +13,10 @@
     <string name="button_finalProject">Final Project</string>
     <string name="button_quit">Quit</string>
 
+    <!--aboutPage information-->
+    <string name="name">Emma Yujiao Liu</string>
+    <string name="email">liu.yuji@husky.neu.edu</string>
+    <string name="description">2nd year MS in Computer Science</string>
+    <string name="phoneIMEI">990003557343494</string>
 
 </resources>

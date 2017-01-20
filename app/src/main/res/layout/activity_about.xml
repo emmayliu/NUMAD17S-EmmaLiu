@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView
     android:id="@+id/scrollview"
     android:layout_width="fill_parent"
@@ -14,7 +15,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="Emma Yujiao Liu"
+            android:text="@string/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/name"
@@ -23,7 +24,7 @@
             android:fontFamily="sans-serif" />
 
         <TextView
-            android:text="liu.yuji@husky.neu.edu"
+            android:text="@string/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/email"
@@ -31,7 +32,7 @@
             android:fontFamily="sans-serif" />
 
         <TextView
-            android:text="2nd year MS in Computer Science"
+            android:text="@string/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/program"
@@ -45,9 +46,9 @@
             android:layout_weight="0.45" />
 
         <TextView
-            android:text="990003557343494"
+            android:text="@string/phoneIMEI"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:id="@+id/IMEI"
             android:layout_weight="0.38"
             android:textAlignment="center"
