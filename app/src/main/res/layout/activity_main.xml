@@ -32,54 +32,6 @@
             android:id="@+id/generateError"
             android:text="@string/button_error"
             android:onClick="getError"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:id="@+id/sedoku"
-            android:text="@string/button_sudoku" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:id="@+id/dictionary"
-            android:text="@string/button_dictionary" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/dabble"
-            android:text="@string/button_dabble" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:id="@+id/communication"
-            android:text="@string/button_communication" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:id="@+id/twoPlayerDabble"
-            android:text="@string/button_twoDabble" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:id="@+id/tricklestPart"
-            android:text="@string/button_trickiest" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:id="@+id/finalProject"
-            android:text="@string/button_finalProject" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:id="@+id/quit"
-            android:text="@string/button_quit"
-            android:onClick="clickQuit"/>
     </LinearLayout>
 </ScrollView>

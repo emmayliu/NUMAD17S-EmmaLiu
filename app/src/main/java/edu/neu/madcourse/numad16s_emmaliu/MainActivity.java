@@ -19,11 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, AboutMe.class);
         startActivity(intent);
     }
-
-    public void clickQuit(View v) {
-        finish();
-    }
-
+    
     public void getError(View v) {
         throw new RuntimeException("This is a crash");
     }
