@@ -21,5 +21,6 @@
     <string name="phoneIMEI">990003557343494</string>
 
     <string name="aboutTitle">"About"</string>
+    <string name="homeTitile">"Home"</string>
 
 </resources>
