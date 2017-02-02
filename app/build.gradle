@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "edu.neu.madcourse.numad16s_emmaliu"
+        applicationId "edu.neu.madcourse.numad17s_emmaliu"
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 2
