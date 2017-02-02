@@ -69,8 +69,7 @@ public class AboutMe extends AppCompatActivity {
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     Log.v(TAG, "user give the permission!");
-                    // permission was granted, yay! Do the
-                    // permissions-related task you need to do.
+
                     TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                     TextView textView = (TextView) findViewById(R.id.phoneId);
                     if (tm.getDeviceId() != null) {
