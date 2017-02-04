@@ -5,7 +5,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
+import java.util.ArrayList;
+
 
 public class Dictionary extends AppCompatActivity {
 
@@ -13,7 +19,20 @@ public class Dictionary extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
+
+        ArrayList<String> words = new ArrayList<>();
+        words.add("Hello");
+        words.add("World");
+
+
+        ListAdapter adapter = new ArrayAdapter<String>(this, R.layout.mylist_layout,words);
+
+
+        ListView listView = (ListView) findViewById(R.id.word_list);
+        listView.setAdapter(adapter);
+
     }
+
 
     public void back_button_click(View view) {
         Intent intent = new Intent(Dictionary.this, MainActivity.class);
@@ -35,6 +54,4 @@ public class Dictionary extends AppCompatActivity {
         et.setText("");
 
     }
-
-
 }
