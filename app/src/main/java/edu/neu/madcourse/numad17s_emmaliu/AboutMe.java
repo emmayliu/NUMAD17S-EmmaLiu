@@ -12,9 +12,6 @@ import android.widget.TextView;
 import android.util.Log;
 
 
-
-
-
 public class AboutMe extends AppCompatActivity {
     private static final int DEV_ID_PERMISSION = 1;
     private static final String TAG = "DisplayMessageActivity";

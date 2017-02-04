@@ -5,14 +5,8 @@
     <!--button names-->
     <string name="button_about">About</string>
     <string name="button_error">Generate Error</string>
-    <string name="button_sudoku">Sudoku</string>
     <string name="button_dictionary">Dictionary</string>
-    <string name="button_dabble">Dabble</string>
-    <string name="button_communication">Communication</string>
-    <string name="button_twoDabble">Two Player Dabble</string>
-    <string name="button_trickiest">Trickiest Part</string>
-    <string name="button_finalProject">Final Project</string>
-    <string name="button_quit">Quit</string>
+
 
     <!--aboutPage information-->
     <string name="name">Emma Yujiao Liu</string>
@@ -20,7 +14,14 @@
     <string name="description">2nd year MS in Computer Science</string>
 
 
+    <string name="aboutTitle">About</string>
+    <string name="dictionaryTitle">Test Dictionary</string>
 
-    <string name="aboutTitle">"About"</string>
+    <!--DictionaryPage information-->
+    <string name="hint">Type your word</string>
+    <string name="acknowledgementsTitle">Acknowledgements</string>
+    <string name="acknowledgements">
+        N/A for this assignment right now, will keep you updated
+    </string>
 
 </resources>

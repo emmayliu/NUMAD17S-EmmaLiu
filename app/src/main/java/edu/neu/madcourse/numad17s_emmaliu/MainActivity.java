@@ -24,4 +24,11 @@ public class MainActivity extends AppCompatActivity {
         throw new RuntimeException("This is a crash");
     }
 
+    public void dictionary_button_click(View view) {
+        Intent intent = new Intent(MainActivity.this, Dictionary.class);
+        startActivity(intent);
+    }
+
+
+
 }
