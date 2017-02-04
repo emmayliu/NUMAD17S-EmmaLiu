@@ -9,21 +9,19 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 
 
 public class Dictionary extends AppCompatActivity {
+    ArrayList<String> words = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
 
-        ArrayList<String> words = new ArrayList<>();
         words.add("Hello");
         words.add("World");
-
 
         ListAdapter adapter = new ArrayAdapter<String>(this, R.layout.mylist_layout,words);
 
@@ -49,9 +47,9 @@ public class Dictionary extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void clear_edit (View view) {
+    public void clear(View view) {
         EditText et = (EditText) findViewById(R.id.editText);
         et.setText("");
-
+        words.clear();
     }
 }

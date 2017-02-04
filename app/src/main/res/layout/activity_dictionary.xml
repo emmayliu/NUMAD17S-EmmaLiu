@@ -19,7 +19,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:id="@+id/button2"
-        android:onClick="clear_edit"
+        android:onClick="clear"
         android:textAllCaps="false"/>
 
     <Button
