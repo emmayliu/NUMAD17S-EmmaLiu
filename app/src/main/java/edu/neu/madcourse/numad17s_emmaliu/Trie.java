@@ -4,91 +4,86 @@ package edu.neu.madcourse.numad17s_emmaliu;
  * Created by emma on 2/4/17.
  */
 
-
+import java.util.HashMap;
+import java.util.Map;
 
 class Node {
+    char c;
+    HashMap<Character, Node> children = new HashMap<>();
+    boolean isWord;
 
-    //assume we only have 26 character based on provided wordlist
-    private Node[] children;
-    private boolean isEnd;
-
-    //constructor
     public Node() {
-        this.children = new Node[26];
+
     }
 
-    public void setEnd() {
-        isEnd = true;
+    public Node(char c) {
+        this.c = c;
     }
 
-    public boolean isEnd() {
-        return isEnd;
-    }
-
-    public boolean contains (char c) {
-        if (children[c - 'a'] != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void set(char c, Node node) {
-        children[c - 'a'] = node;
-    }
-
-    public Node get (char c) {
-        return children[c - 'a'];
-    }
 }
 
 
 public class Trie {
     private Node root;
 
-    //constructor
     public Trie() {
         root = new Node();
     }
 
-    //1. Insert a word into trie
-
     public void insert(String word) {
-        Node curNode = root;
-        for (int i = 0; i < word.length(); i++) {
-            char c = word.charAt(i);
-            if (!curNode.contains(c)) {
-                curNode.set(c, new Node());
-            }
-            curNode = curNode.get(c);
-        }
-        curNode.setEnd();
-    }
+        HashMap<Character, Node> children = root.children;
 
-    //2. Search Prefix
-    private Node searchPrefix(String word) {
-        Node curNode = root;
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
-            if (curNode.contains(c)) {
-                curNode = curNode.get(c);
+            Node node;
+            if (children.containsKey(c)) {
+                node = children.get(c);
             } else {
-                return null;
+                node = new Node(c);
+                children.put(c, node);
             }
-        }
-        return curNode;
-    }
+            children = node.children;
 
-    //3. Search word
+            if (i == word.length() - 1) {
+                node.isWord = true;
+            }
+
+        }
+    }
 
     public boolean search(String word) {
-        Node node = searchPrefix(word);
-        if (node != null && node.isEnd()) {
+        Node node = searchNode(word);
+
+        if (node != null && node.isWord) {
             return true;
         } else {
             return false;
         }
     }
+
+    public boolean startWith(String prefix) {
+        if (searchNode(prefix) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public Node searchNode(String word) {
+        Map<Character, Node> children = root.children;
+        Node node = null;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (children.containsKey(c)) {
+                node = children.get(c);
+                children = node.children;
+            } else {
+                return null;
+            }
+        }
+        return node;
+    }
+
 
 }
 

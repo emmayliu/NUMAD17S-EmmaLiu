@@ -31,6 +31,8 @@ public class Dictionary extends AppCompatActivity  {
     ArrayList<String> words = new ArrayList<>();
     String inputWord = "";
     Trie trie = new Trie();
+    String fileName = "";
+    boolean[][][] visited = new boolean[26][26][26];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,32 @@ public class Dictionary extends AppCompatActivity  {
             @Override
             public void afterTextChanged(Editable s) {
                 inputWord = s.toString();
-                if (trie.search(inputWord)) {
-                    Log.e(TAG, "Yes, find the words");
-                    if (!words.contains(inputWord)) {
-                        words.add(inputWord);
+                if (inputWord.length() >= 3) {
+                    fileName = inputWord.substring(0, 3);
+                    int a = fileName.charAt(0) - 'a';
+                    int b = fileName.charAt(1) - 'a';
+                    int c = fileName.charAt(2) - 'a';
+                    Log.e(TAG, fileName);
+                    if (!visited[a][b][c]) {
+                        try {
+                            readData(fileName);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        visited[a][b][c] = true;
                     }
-                } else {
-                    Log.e(TAG, "word is not exist");
+
+                    if (trie.search(inputWord)) {
+                        Log.e(TAG, "Find word " + inputWord);
+                        if (!words.contains(inputWord)) {
+                            words.add(inputWord);
+                        }
+                    } else {
+                        Log.e(TAG, "word" + inputWord + " doesn't exist");
+                    }
+
                 }
+
             }
         });
 
@@ -86,20 +106,14 @@ public class Dictionary extends AppCompatActivity  {
 //            }
 //        }
 
-        try {
-            readData();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
 
 
     }
 
-    public void readData() throws IOException {
+    public void readData(String fileName) throws IOException {
         try {
             AssetManager manager = getResources().getAssets();
-            InputStream is = manager.open("un.txt");
+            InputStream is = manager.open(fileName + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line;
             Long tsLong = System.currentTimeMillis()/1000;
@@ -133,7 +147,6 @@ public class Dictionary extends AppCompatActivity  {
         alertDialog.setTitle(R.string.acknowledgementsTitle);
         alertDialog.setMessage
                 (getApplicationContext().getResources().getString(R.string.acknowledgements));
-
         alertDialog.show();
     }
 
