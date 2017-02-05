@@ -18,15 +18,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
-        android:id="@+id/button2"
-        android:onClick="clear"
+        android:id="@+id/clear_button"
         android:textAllCaps="false"/>
 
     <Button
         android:text="Acknowledgments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button4"
+        android:id="@+id/acknowledge_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -37,7 +36,7 @@
         android:text="Return to Menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button3"
+        android:id="@+id/back_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -60,7 +59,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/button4"
-        android:layout_below="@+id/button2"
+        android:layout_above="@+id/acknowledge_button"
+        android:layout_below="@+id/clear_button"
         android:id="@+id/word_list"/>
 </RelativeLayout>

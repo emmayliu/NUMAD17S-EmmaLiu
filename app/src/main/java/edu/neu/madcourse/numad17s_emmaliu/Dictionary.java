@@ -2,7 +2,6 @@ package edu.neu.madcourse.numad17s_emmaliu;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.renderscript.ScriptGroup;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,10 +10,9 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.util.Log;
-import com.google.gson.Gson;
+import android.widget.Button;
 
 
 
@@ -28,7 +26,9 @@ import java.util.ArrayList;
 
 public class Dictionary extends AppCompatActivity  {
     private static final String TAG = "Test File existense";
-    ArrayList<String> words = new ArrayList<>();
+    private ArrayAdapter adapter;
+    private EditText editText;
+    public static ArrayList<String> words = new ArrayList<String>();
     String inputWord = "";
     Trie trie = new Trie();
     String fileName = "";
@@ -39,8 +39,25 @@ public class Dictionary extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
 
+        adapter = new ArrayAdapter<String>(this, R.layout.mylist_layout,words);
+        ListView listView = (ListView) findViewById(R.id.word_list);
 
-        final EditText editText = (EditText) findViewById(R.id.editText);
+        listView.setAdapter(adapter);
+
+        Button clearButton;
+        clearButton = (Button) findViewById(R.id.clear_button);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
+                words.clear();
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+
+
+        editText = (EditText) findViewById(R.id.editText);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -55,6 +72,7 @@ public class Dictionary extends AppCompatActivity  {
             @Override
             public void afterTextChanged(Editable s) {
                 inputWord = s.toString();
+                Log.e(TAG, inputWord);
                 if (inputWord.length() >= 3) {
                     fileName = inputWord.substring(0, 3);
                     int a = fileName.charAt(0) - 'a';
@@ -63,11 +81,11 @@ public class Dictionary extends AppCompatActivity  {
                     Log.e(TAG, fileName);
                     if (!visited[a][b][c]) {
                         try {
+                            visited[a][b][c] = true;
                             readData(fileName);
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
-                        visited[a][b][c] = true;
                     }
 
                     if (trie.search(inputWord)) {
@@ -83,31 +101,6 @@ public class Dictionary extends AppCompatActivity  {
 
             }
         });
-
-
-
-        ListAdapter adapter = new ArrayAdapter<String>(this, R.layout.mylist_layout,words);
-
-
-        ListView listView = (ListView) findViewById(R.id.word_list);
-        listView.setAdapter(adapter);
-
-
-//        AssetManager manager = getResources().getAssets();
-//        InputStream is = null;
-//        try {
-//            is = manager.open("wordlist.txt");
-//        } catch (IOException ex) {
-//            Log.e(TAG, "cannot get file");
-//
-//        } finally {
-//            if (is != null) {
-//                Log.i(TAG, "Wordlist file is here");
-//            }
-//        }
-
-
-
     }
 
     public void readData(String fileName) throws IOException {
@@ -149,12 +142,4 @@ public class Dictionary extends AppCompatActivity  {
                 (getApplicationContext().getResources().getString(R.string.acknowledgements));
         alertDialog.show();
     }
-
-    public void clear(View view) {
-        EditText et = (EditText) findViewById(R.id.editText);
-        et.setText("");
-        words.clear();
-    }
-
-
 }
