@@ -4,19 +4,17 @@ package edu.neu.madcourse.numad17s_emmaliu;
  * Created by emma on 2/4/17.
  */
 
-import java.util.HashMap;
-import java.util.LinkedList;
+
 
 class Node {
 
     //assume we only have 26 character based on provided wordlist
-    private final int C = 26;
     private Node[] children;
     private boolean isEnd;
 
     //constructor
     public Node() {
-        children = new Node[C];
+        this.children = new Node[26];
     }
 
     public void setEnd() {
