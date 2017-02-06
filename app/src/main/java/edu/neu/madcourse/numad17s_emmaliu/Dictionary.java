@@ -18,24 +18,16 @@ import android.widget.Button;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.text.TextUtils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Arrays;
-
 
 
 public class Dictionary extends AppCompatActivity  {
-    private static final String TAG = "Test File existense";
-    private ListView listView;
+    private static final String TAG = "LOG_ACTIVITY";
     private ArrayAdapter adapter;
     private EditText editText;
     private ToneGenerator toneGenerator;
@@ -53,8 +45,7 @@ public class Dictionary extends AppCompatActivity  {
         toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
 
         adapter = new ArrayAdapter<String>(this, R.layout.mylist_layout,words);
-        listView = (ListView) findViewById(R.id.word_list);
-
+        ListView listView = (ListView) findViewById(R.id.word_list);
         listView.setAdapter(adapter);
 
         Button clearButton;
@@ -85,13 +76,13 @@ public class Dictionary extends AppCompatActivity  {
             @Override
             public void afterTextChanged(Editable s) {
                 inputWord = s.toString();
-                Log.e(TAG, inputWord);
+
                 if (inputWord.length() >= 3) {
                     fileName = inputWord.substring(0, 3);
                     int a = fileName.charAt(0) - 'a';
                     int b = fileName.charAt(1) - 'a';
                     int c = fileName.charAt(2) - 'a';
-                    Log.e(TAG, fileName);
+
                     if (!visited[a][b][c]) {
                         try {
                             visited[a][b][c] = true;
@@ -100,19 +91,15 @@ public class Dictionary extends AppCompatActivity  {
                             ex.printStackTrace();
                         }
                     }
-
                     if (trie.search(inputWord)) {
-                        Log.e(TAG, "Find word " + inputWord);
                         toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
                         if (!words.contains(inputWord)) {
                             words.add(inputWord);
                         }
                     } else {
-                        Log.e(TAG, "word" + inputWord + " doesn't exist");
+                        Log.e(TAG, "word" + inputWord + " doesn't exist in dictionary");
                     }
-
                 }
-
             }
         });
     }
@@ -126,14 +113,10 @@ public class Dictionary extends AppCompatActivity  {
             Long tsLong = System.currentTimeMillis()/1000;
             System.out.println(tsLong.toString());
 
-
             while ((line = reader.readLine()) != null) {
-                //System.out.println(line.split("\n")[0]);
                 trie.insert(line.split("\n")[0]);
             }
             Log.e(TAG, "trie build complete");
-            Long tsLong2 = System.currentTimeMillis()/1000;
-            System.out.println(tsLong2.toString());
 
             reader.close();
             is.close();
@@ -154,23 +137,21 @@ public class Dictionary extends AppCompatActivity  {
 
     @Override
     protected void onResume() {
-        String saveWords = this.getSharedPreferences("save", Context.MODE_PRIVATE).getString("content", null);
-        Log.e(saveWords, "get savewords");
+        String saveWords =
+                this.getSharedPreferences("save", Context.MODE_PRIVATE).getString("content", null);
+
         if (saveWords != null && saveWords.length() != 0) {
             String[] temp = saveWords.split(",");
             for (int i = 0; i < temp.length; i++) {
                 words.add(temp[i]);
             }
-            Log.e(words.toString(), "this is words");
         }
         super.onResume();
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 
     public void back_button_click(View view) {
@@ -182,8 +163,13 @@ public class Dictionary extends AppCompatActivity  {
     public void acknowledge_button_click(View view) {
         AlertDialog alertDialog = new AlertDialog.Builder(Dictionary.this).create();
         alertDialog.setTitle(R.string.acknowledgementsTitle);
+        String trie = getApplicationContext().getResources().getString(R.string.acknowledgements_Trie);
+        String discuss = getApplicationContext().getResources().getString(R.string.acknowledgements_discuss);
+        String piazza = getApplicationContext().getResources().getString(R.string.acknowledgements_Piazza);
+        String files = getApplicationContext().getResources().getString(R.string.acknowledgements_split_file);
         alertDialog.setMessage
-                (getApplicationContext().getResources().getString(R.string.acknowledgements));
+                (piazza + "\n" + "\n" + discuss + "\n" + "\n" +trie + "\n" + "\n" + files);
+
         alertDialog.show();
     }
 }

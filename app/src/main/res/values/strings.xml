@@ -20,8 +20,21 @@
     <!--DictionaryPage information-->
     <string name="hint">Type your word</string>
     <string name="acknowledgementsTitle">Acknowledgements</string>
-    <string name="acknowledgements">
-        N/A for this assignment right now, will keep you updated
+
+    <string name="acknowledgements_Trie">
+        Tire: https://en.wikipedia.org/wiki/Trie
     </string>
+
+    <string name="acknowledgements_discuss">
+        Discussion: Discussed idea with Yudong Wang, Enting Wu
+    </string>
+
+    <string name="acknowledgements_Piazza">
+        Piazza:  Questions on Piazza related with assignment 3
+    </string>
+    <string name="acknowledgements_split_file">
+        File_split: https://goo.gl/kYeVYb (stackOverflow)
+    </string>
+
 
 </resources>
