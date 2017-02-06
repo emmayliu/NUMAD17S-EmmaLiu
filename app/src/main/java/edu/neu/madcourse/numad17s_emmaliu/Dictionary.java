@@ -1,6 +1,8 @@
 package edu.neu.madcourse.numad17s_emmaliu;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,9 @@ import android.util.Log;
 import android.widget.Button;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.text.TextUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
 
@@ -23,15 +28,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Arrays;
 
 
 
 public class Dictionary extends AppCompatActivity  {
     private static final String TAG = "Test File existense";
+    private ListView listView;
     private ArrayAdapter adapter;
     private EditText editText;
     private ToneGenerator toneGenerator;
-    public static ArrayList<String> words = new ArrayList<String>();
+    private ArrayList<String> words = new ArrayList<>();
     String inputWord = "";
     Trie trie = new Trie();
     String fileName = "";
@@ -45,7 +53,7 @@ public class Dictionary extends AppCompatActivity  {
         toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
 
         adapter = new ArrayAdapter<String>(this, R.layout.mylist_layout,words);
-        ListView listView = (ListView) findViewById(R.id.word_list);
+        listView = (ListView) findViewById(R.id.word_list);
 
         listView.setAdapter(adapter);
 
@@ -134,6 +142,36 @@ public class Dictionary extends AppCompatActivity  {
         }
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String savedWords = TextUtils.join(",", words);
+        Log.e(savedWords, "This is saved words in onPause");
+        SharedPreferences sp = this.getSharedPreferences("save", Context.MODE_PRIVATE);
+        sp.edit().putString("content", savedWords).commit();
+    }
+
+    @Override
+    protected void onResume() {
+        String saveWords = this.getSharedPreferences("save", Context.MODE_PRIVATE).getString("content", null);
+        Log.e(saveWords, "get savewords");
+        if (saveWords != null && saveWords.length() != 0) {
+            String[] temp = saveWords.split(",");
+            for (int i = 0; i < temp.length; i++) {
+                words.add(temp[i]);
+            }
+            Log.e(words.toString(), "this is words");
+        }
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
 
     public void back_button_click(View view) {
         Intent intent = new Intent(Dictionary.this, MainActivity.class);
