@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.util.Log;
 import android.widget.Button;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 
 
 
@@ -28,6 +30,7 @@ public class Dictionary extends AppCompatActivity  {
     private static final String TAG = "Test File existense";
     private ArrayAdapter adapter;
     private EditText editText;
+    private ToneGenerator toneGenerator;
     public static ArrayList<String> words = new ArrayList<String>();
     String inputWord = "";
     Trie trie = new Trie();
@@ -38,6 +41,8 @@ public class Dictionary extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
+
+        toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
 
         adapter = new ArrayAdapter<String>(this, R.layout.mylist_layout,words);
         ListView listView = (ListView) findViewById(R.id.word_list);
@@ -90,6 +95,7 @@ public class Dictionary extends AppCompatActivity  {
 
                     if (trie.search(inputWord)) {
                         Log.e(TAG, "Find word " + inputWord);
+                        toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
                         if (!words.contains(inputWord)) {
                             words.add(inputWord);
                         }
