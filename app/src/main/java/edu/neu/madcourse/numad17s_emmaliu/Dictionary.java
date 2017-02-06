@@ -37,6 +37,7 @@ public class Dictionary extends AppCompatActivity  {
     String fileName = "";
     boolean[][][] visited = new boolean[26][26][26];
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,34 +126,6 @@ public class Dictionary extends AppCompatActivity  {
         }
     }
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        String savedWords = TextUtils.join(",", words);
-        Log.e(savedWords, "This is saved words in onPause");
-        SharedPreferences sp = this.getSharedPreferences("save", Context.MODE_PRIVATE);
-        sp.edit().putString("content", savedWords).commit();
-    }
-
-    @Override
-    protected void onResume() {
-        String saveWords =
-                this.getSharedPreferences("save", Context.MODE_PRIVATE).getString("content", null);
-
-        if (saveWords != null && saveWords.length() != 0) {
-            String[] temp = saveWords.split(",");
-            for (int i = 0; i < temp.length; i++) {
-                words.add(temp[i]);
-            }
-        }
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     public void back_button_click(View view) {
         Intent intent = new Intent(Dictionary.this, MainActivity.class);
