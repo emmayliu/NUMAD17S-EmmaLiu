@@ -19,6 +19,7 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.text.TextUtils;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,29 +78,38 @@ public class Dictionary extends AppCompatActivity  {
             @Override
             public void afterTextChanged(Editable s) {
                 inputWord = s.toString();
+                if (isAlpha(inputWord)) {
+                    System.out.println("inputWord " + inputWord);
 
-                if (inputWord.length() >= 3) {
-                    fileName = inputWord.substring(0, 3);
-                    int a = fileName.charAt(0) - 'a';
-                    int b = fileName.charAt(1) - 'a';
-                    int c = fileName.charAt(2) - 'a';
+                    if (inputWord.length() >= 3) {
+                        fileName = inputWord.substring(0, 3);
+                        int a = fileName.charAt(0) - 'a';
+                        int b = fileName.charAt(1) - 'a';
+                        int c = fileName.charAt(2) - 'a';
 
-                    if (!visited[a][b][c]) {
-                        try {
-                            visited[a][b][c] = true;
-                            readData(fileName);
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
+                        //System.out.println("a: " + a);
+                        //System.out.println("b: " + b);
+                        //System.out.println("c: " + c);
+
+                        if (!visited[a][b][c]) {
+                            try {
+                                visited[a][b][c] = true;
+                                readData(fileName);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        if (trie.search(inputWord)) {
+                            toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
+                            if (!words.contains(inputWord)) {
+                                words.add(inputWord);
+                            }
+                        } else {
+                            Log.e(TAG, "word" + inputWord + " doesn't exist in dictionary");
                         }
                     }
-                    if (trie.search(inputWord)) {
-                        toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
-                        if (!words.contains(inputWord)) {
-                            words.add(inputWord);
-                        }
-                    } else {
-                        Log.e(TAG, "word" + inputWord + " doesn't exist in dictionary");
-                    }
+                } else {
+                    Log.e(TAG, "Not valid input");
                 }
             }
         });
@@ -125,6 +135,11 @@ public class Dictionary extends AppCompatActivity  {
             ex.printStackTrace();
         }
     }
+
+    public boolean isAlpha (String s) {
+        return s.matches("[a-z]+");
+    }
+
 
 
     public void back_button_click(View view) {

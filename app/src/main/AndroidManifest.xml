@@ -23,7 +23,8 @@
             android:label="@string/aboutTitle"/>
         <activity
             android:name=".Dictionary"
-            android:label="@string/dictionaryTitle">
+            android:label="@string/dictionaryTitle"
+            android:configChanges="orientation|screenSize|keyboard">
 
         </activity>
     </application>
