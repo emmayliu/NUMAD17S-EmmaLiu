@@ -76,7 +76,6 @@ public class DictionaryActivity extends AppCompatActivity  {
             public void afterTextChanged(Editable s) {
                 inputWord = s.toString();
                 if (isAlpha(inputWord)) {
-                    System.out.println("inputWord " + inputWord);
 
                     if (inputWord.length() >= 3) {
                         fileName = inputWord.substring(0, 3);
@@ -84,9 +83,6 @@ public class DictionaryActivity extends AppCompatActivity  {
                         int b = fileName.charAt(1) - 'a';
                         int c = fileName.charAt(2) - 'a';
 
-                        //System.out.println("a: " + a);
-                        //System.out.println("b: " + b);
-                        //System.out.println("c: " + c);
 
                         if (!visited[a][b][c]) {
                             try {
@@ -118,8 +114,6 @@ public class DictionaryActivity extends AppCompatActivity  {
             InputStream is = manager.open(fileName + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line;
-            Long tsLong = System.currentTimeMillis()/1000;
-            System.out.println(tsLong.toString());
 
             while ((line = reader.readLine()) != null) {
                 trie.insert(line.split("\n")[0]);
