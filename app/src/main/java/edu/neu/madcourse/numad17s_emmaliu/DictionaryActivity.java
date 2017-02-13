@@ -1,8 +1,6 @@
 package edu.neu.madcourse.numad17s_emmaliu;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +15,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
-import android.text.TextUtils;
 
 
 import java.io.BufferedReader;
@@ -27,7 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
-public class Dictionary extends AppCompatActivity  {
+public class DictionaryActivity extends AppCompatActivity  {
     private static final String TAG = "LOG_ACTIVITY";
     private ArrayAdapter adapter;
     private EditText editText;
@@ -143,13 +140,13 @@ public class Dictionary extends AppCompatActivity  {
 
 
     public void back_button_click(View view) {
-        Intent intent = new Intent(Dictionary.this, MainActivity.class);
+        Intent intent = new Intent(DictionaryActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     public void acknowledge_button_click(View view) {
-        AlertDialog alertDialog = new AlertDialog.Builder(Dictionary.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(DictionaryActivity.this).create();
         alertDialog.setTitle(R.string.acknowledgementsTitle);
         String trie = getApplicationContext().getResources().getString(R.string.acknowledgements_Trie);
         String discuss = getApplicationContext().getResources().getString(R.string.acknowledgements_discuss);

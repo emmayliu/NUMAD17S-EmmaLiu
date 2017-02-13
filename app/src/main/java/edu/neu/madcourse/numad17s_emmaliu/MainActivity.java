@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void about_button_click(View view) {
-        Intent intent = new Intent(MainActivity.this, AboutMe.class);
+        Intent intent = new Intent(MainActivity.this, AboutActivity.class);
         startActivity(intent);
     }
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void dictionary_button_click(View view) {
-        Intent intent = new Intent(MainActivity.this, Dictionary.class);
+        Intent intent = new Intent(MainActivity.this, DictionaryActivity.class);
         startActivity(intent);
     }
 

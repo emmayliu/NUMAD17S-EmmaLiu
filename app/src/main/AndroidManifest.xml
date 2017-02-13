@@ -19,10 +19,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutMe"
+            android:name=".AboutActivity"
             android:label="@string/aboutTitle"/>
         <activity
-            android:name=".Dictionary"
+            android:name=".DictionaryActivity"
             android:label="@string/dictionaryTitle"
             android:configChanges="orientation|screenSize|keyboard">
 
