@@ -6,7 +6,7 @@
  * We make no guarantees that this code is fit for any purpose. 
  * Visit http://www.pragmaticprogrammer.com/titles/eband4 for more book information.
 ***/
-package edu.neu.madcourse.numad17s_emmaliu.tictactoe;
+package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -95,7 +95,7 @@ public class GameActivity extends Activity {
    @Override
    protected void onResume() {
       super.onResume();
-      mMediaPlayer = MediaPlayer.create(this, R.raw.frankum_loop001e);
+      mMediaPlayer = MediaPlayer.create(this, R.raw.yankee);
       mMediaPlayer.setLooping(true);
       mMediaPlayer.start();
    }

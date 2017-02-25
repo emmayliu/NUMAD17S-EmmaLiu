@@ -6,13 +6,14 @@
  * We make no guarantees that this code is fit for any purpose. 
  * Visit http://www.pragmaticprogrammer.com/titles/eband4 for more book information.
 ***/
-package edu.neu.madcourse.numad17s_emmaliu.tictactoe;
+package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
+
 
 public class MainActivity extends Activity {
    MediaPlayer mMediaPlayer;
@@ -27,7 +28,7 @@ public class MainActivity extends Activity {
    @Override
    protected void onResume() {
       super.onResume();
-      mMediaPlayer = MediaPlayer.create(this, R.raw.a_guy_1_epicbuilduploop);
+      mMediaPlayer = MediaPlayer.create(this, R.raw.office);
       mMediaPlayer.setVolume(0.5f, 0.5f);
       mMediaPlayer.setLooping(true);
       mMediaPlayer.start();
