@@ -30,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void tic_tac_toe_button_click(View view) {
+        Intent intent = new Intent(MainActivity.this, edu.neu.madcourse.numad17s_emmaliu.tictactoe.MainActivity.class);
+        startActivity(intent);
+    }
+
+
+
 
 
 }

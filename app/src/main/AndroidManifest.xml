@@ -11,6 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
@@ -20,12 +21,23 @@
         </activity>
         <activity
             android:name=".AboutActivity"
-            android:label="@string/aboutTitle"/>
+            android:label="@string/aboutTitle" />
         <activity
             android:name=".DictionaryActivity"
-            android:label="@string/dictionaryTitle"
-            android:configChanges="orientation|screenSize|keyboard">
+            android:configChanges="orientation|screenSize|keyboard"
+            android:label="@string/dictionaryTitle"></activity>
+        <activity android:name=".TicTacToeActivity"></activity>
 
+        <activity
+            android:name=".tictactoe.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="edu.neu.madcourse.numad17s_emmaliu.tictactoe.GameActivity">
         </activity>
     </application>
 

@@ -41,6 +41,14 @@
             android:textSize="14sp"
             android:text="@string/button_dictionary"
             android:onClick="dictionary_button_click"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:id="@+id/button4"
+            android:textSize="14sp"
+            android:text="@string/tictactoe"
+            android:onClick="tic_tac_toe_button_click"/>
 
     </LinearLayout>
 </ScrollView>
