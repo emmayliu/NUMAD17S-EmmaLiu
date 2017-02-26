@@ -47,7 +47,7 @@
             android:textAllCaps="false"
             android:id="@+id/button4"
             android:textSize="14sp"
-            android:text="@string/tictactoe"
+            android:text="@string/wordGame"
             android:onClick="tic_tac_toe_button_click"/>
 
     </LinearLayout>

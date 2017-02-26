@@ -97,8 +97,10 @@ public class GameFragment extends Fragment {
                @Override
                public void onClick(View view) {
                   smallTile.animate();
+                  smallTile.selectLetter();
                   // ...
                   if (isAvailable(smallTile)) {
+
                      ((GameActivity)getActivity()).startThinking();
                      mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
                      makeMove(fLarge, fSmall);
@@ -201,7 +203,7 @@ public class GameFragment extends Fragment {
    }
 
    public void initGame() {
-      Log.d("UT3", "init game");
+      Log.e("word game", "init game");
       mEntireBoard = new Tile(this);
       // Create all the tiles
       for (int large = 0; large < 9; large++) {
@@ -212,6 +214,7 @@ public class GameFragment extends Fragment {
          mLargeTiles[large].setSubTiles(mSmallTiles[large]);
       }
       mEntireBoard.setSubTiles(mLargeTiles);
+      fillWithWords();
 
       // If the player moves first, set which spots are available
       mLastSmall = -1;
@@ -219,6 +222,15 @@ public class GameFragment extends Fragment {
       setAvailableFromLastMove(mLastSmall);
    }
 
+   private void fillWithWords() {
+      String word = "ABCDEFGHI";
+      String[] arr = new String[] {word, word, word, word, word, word, word, word, word};
+      for (int i = 0 ; i < 9; i++) {
+         for (int j = 0; j < 9; j++) {
+            mSmallTiles[i][j].setLetter(arr[i].charAt(j));
+         }
+      }
+   }
    private void setAvailableFromLastMove(int small) {
       clearAvailable();
       // Make all the tiles at the destination available

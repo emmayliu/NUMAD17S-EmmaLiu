@@ -13,18 +13,18 @@
    android:layout_width="match_parent"
    android:layout_height="match_parent"
    android:clipChildren="false"
-   tools:context=".tictactoe.MainActivity">
+   tools:context=".wordGame.MainActivity">
 
-   <edu.neu.madcourse.numad17s_emmaliu.tictactoe.ScrollingView
+   <edu.neu.madcourse.numad17s_emmaliu.wordGame.ScrollingView
       android:id="@+id/main_background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      app:scrollingDrawable="@drawable/xando_background"/>
+      app:scrollingDrawable="@drawable/wordlist"/>
 
    <fragment
       android:id="@+id/main_fragment"
-      class="edu.neu.madcourse.numad17s_emmaliu.tictactoe.MainFragment"
-      android:layout_width="wrap_content"
+      class="edu.neu.madcourse.numad17s_emmaliu.wordGame.MainFragment"
+      android:layout_width="250dp"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       tools:layout="@layout/fragment_main"/>

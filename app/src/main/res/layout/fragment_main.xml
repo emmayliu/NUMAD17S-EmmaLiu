@@ -15,15 +15,17 @@
    android:elevation="@dimen/elevation_high"
    android:orientation="vertical"
    android:padding="@dimen/menu_padding"
-   tools:context=".TicTacToeActivity">
+   tools:context=".wordGame.MainActivity">
 
    <TextView
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/menu_space"
       android:text="@string/long_app_name"
       android:textAppearance="?android:textAppearanceLarge"
-      android:textSize="@dimen/menu_text_size"/>
+      android:textSize="@dimen/menu_text_size"
+       android:textAlignment="center"
+       android:textStyle="normal|bold" />
 
    <Button
       android:id="@+id/continue_button"

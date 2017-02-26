@@ -11,13 +11,13 @@
    xmlns:tools="http://schemas.android.com/tools"
    android:layout_width="match_parent"
    android:layout_height="match_parent"
-   tools:context=".TicTacToeActivity">
+   tools:context=".wordGame.GameActivity">
 
    <ImageView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:scaleType="centerCrop"
-      android:src="@drawable/sandy_beach"/>
+      android:src="@drawable/backgroud2"/>
 
    <LinearLayout
       android:layout_width="match_parent"
@@ -27,7 +27,7 @@
 
       <fragment
          android:id="@+id/fragment_game"
-         class="edu.neu.madcourse.numad17s_emmaliu.tictactoe.GameFragment"
+         class="edu.neu.madcourse.numad17s_emmaliu.wordGame.GameFragment"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          tools:layout="@layout/fragment_game"/>
@@ -35,7 +35,7 @@
 
       <fragment
          android:id="@+id/fragment_game_controls"
-         class="edu.neu.madcourse.numad17s_emmaliu.tictactoe.ControlFragment"
+         class="edu.neu.madcourse.numad17s_emmaliu.wordGame.ControlFragment"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          tools:layout="@layout/fragment_control"/>

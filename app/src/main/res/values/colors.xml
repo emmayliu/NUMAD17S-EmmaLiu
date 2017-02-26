@@ -12,7 +12,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBackground">#A9A9A9</color>
-    <color name="field_color">#b5cee0</color>
+    <color name="field_color">#00CCCC</color>
     <color name="border_color">#7f7f7f</color>
     <color name="dark_border_color">#4f4f4f</color>
     <color name="available_color">#7fbf7f</color>
