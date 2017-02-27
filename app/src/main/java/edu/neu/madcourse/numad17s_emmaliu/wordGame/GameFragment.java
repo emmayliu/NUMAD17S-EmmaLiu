@@ -9,23 +9,28 @@
 package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
 import android.app.Fragment;
+import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Random;
 
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
@@ -49,7 +54,7 @@ public class GameFragment extends Fragment {
     private int mLastLarge;
     private int mLastSmall;
     private Map<Integer, ArrayList<Integer>> map = new HashMap<>();
-    private int[] status = new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    private int[] status = new int[9];
 
 
     @Override
@@ -91,12 +96,11 @@ public class GameFragment extends Fragment {
         map.put(8, new ArrayList<>(Arrays.asList(4, 5, 7)));
     }
 
-    private boolean isValidMove(int mLastLarge, int mLastSmall, int large, int small) {
+    private boolean isValidMove(int mLastLarge, int large, int small) {
         if (mLastLarge == -1) {
             return true;
         } else {
             int lasPos = status[large];
-
             if (lasPos == -1) {
                 return true;
             }
@@ -112,7 +116,6 @@ public class GameFragment extends Fragment {
             }
         }
         return false;
-
     }
 
     @Override
@@ -125,9 +128,17 @@ public class GameFragment extends Fragment {
         return rootView;
     }
 
+    private int[] initialStatus(int[] status) {
+        for (int i = 0; i < status.length; i++) {
+            status[i] = -1;
+        }
+        return status;
+    }
+
     private void initViews(View rootView) {
         mEntireBoard.setView(rootView);
         addAllNeighbors();
+        status = initialStatus(status);
         for (int large = 0; large < 9; large++) {
             View outer = rootView.findViewById(mLargeIds[large]);
             mLargeTiles[large].setView(outer);
@@ -146,7 +157,7 @@ public class GameFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         // ...
-                        if (isValidMove(mLastLarge, mLastSmall, fLarge, fSmall)) {
+                        if (isValidMove(mLastLarge, fLarge, fSmall)) {
                             smallTile.animate();
                             smallTile.selectLetter();
                             mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
@@ -195,12 +206,56 @@ public class GameFragment extends Fragment {
         setAvailableFromLastMove(mLastSmall);
     }
 
+    public ArrayList<String> readData(String fileName) throws IOException {
+        ArrayList<String> wordlist = new ArrayList<>();
+        try {
+            AssetManager manager = getResources().getAssets();
+            InputStream is = manager.open(fileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                wordlist.add(line);
+            }
+            reader.close();
+            is.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return wordlist;
+    }
+
+    private int getRandom() {
+        Random rand = new Random();
+        int num = rand.nextInt(999) + 0;
+        return num;
+    }
+
+
+
     private void fillWithWords() {
-        String word = "ABCDEFGHI";
-        String[] arr = new String[] {word, word, word, word, word, word, word, word, word};
+        //randomly pick 1000 words with length 9 in wordlist_random_9.txt
+        ArrayList<String> wordlist = new ArrayList<>();
+        String[] words = new String[9];
+        try{
+            wordlist = readData("wordlist_random_9.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < words.length; i++) {
+            int random = getRandom();
+            String word;
+            word = wordlist.get(random);
+            words[i] = word.toUpperCase();
+        }
+
+        CalculatePath cp = new CalculatePath();
+        ArrayList<String> path = cp.generatePath();
+
         for (int i = 0 ; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                mSmallTiles[i][j].setLetter(arr[i].charAt(j));
+                int pos = path.get(i).charAt(j) - '0';
+                mSmallTiles[i][pos].setLetter(words[i].charAt(j));
             }
         }
     }

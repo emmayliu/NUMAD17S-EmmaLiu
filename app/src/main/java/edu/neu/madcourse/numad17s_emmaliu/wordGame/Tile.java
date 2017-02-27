@@ -175,7 +175,7 @@
             setOwner(Owner.I);
         }
         if (letter == 'J') {
-            setOwner(Owner.G);
+            setOwner(Owner.J);
         }
         if (letter == 'K') {
             setOwner(Owner.K);
@@ -237,7 +237,7 @@
             if (letter == 'G') setOwner(Owner.SG);
             if (letter == 'H') setOwner(Owner.SH);
             if (letter == 'I') setOwner(Owner.SI);
-            if (letter == 'G') setOwner(Owner.SJ);
+            if (letter == 'J') setOwner(Owner.SJ);
             if (letter == 'K') setOwner(Owner.SK);
             if (letter == 'L') setOwner(Owner.SL);
             if (letter == 'M') setOwner(Owner.SM);
