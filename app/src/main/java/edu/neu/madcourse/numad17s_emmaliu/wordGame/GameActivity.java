@@ -48,7 +48,7 @@ public class GameActivity extends Activity {
       mGameFragment.restartGame();
    }
 
-   public void reportWinner(final Tile.Owner winner) {
+  /* public void reportWinner(final Tile.Owner winner) {
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
       if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
          mMediaPlayer.stop();
@@ -90,7 +90,7 @@ public class GameActivity extends Activity {
    public void stopThinking() {
       View thinkView = findViewById(R.id.thinking);
       thinkView.setVisibility(View.GONE);
-   }
+   }*/
 
    @Override
    protected void onResume() {
