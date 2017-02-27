@@ -20,11 +20,12 @@ public class ControlFragment extends Fragment {
 
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                            Bundle savedInstanceState) {
+                            final Bundle savedInstanceState) {
       View rootView =
             inflater.inflate(R.layout.fragment_control, container, false);
       View main = rootView.findViewById(R.id.button_main);
       View restart = rootView.findViewById(R.id.button_restart);
+      View submit = rootView.findViewById(R.id.button_check);
 
       main.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -36,6 +37,21 @@ public class ControlFragment extends Fragment {
          @Override
          public void onClick(View view) {
             ((GameActivity) getActivity()).restartGame();
+         }
+      });
+
+      submit.setOnClickListener(new View.OnClickListener(){
+         @Override
+         public void onClick(View view) {
+             System.out.println("clcik me ......");
+             if (savedInstanceState != null) {
+                 String s = savedInstanceState.toString();
+                 System.out.println(s + "ccccccc");
+             } else {
+                 System.out.println(" no no no ");
+             }
+
+
          }
       });
       return rootView;

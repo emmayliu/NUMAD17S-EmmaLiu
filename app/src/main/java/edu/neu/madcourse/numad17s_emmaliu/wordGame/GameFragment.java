@@ -166,6 +166,8 @@ public class GameFragment extends Fragment {
                             mLastSmall = fSmall;
                             status[fLarge] = fSmall;
 
+                            System.out.println(smallTile.toString() + "bbbbbbb");
+
                         } else {
                             mSoundPool.play(mSoundMiss, mVolume, mVolume, 1, 0, 1f);
                         }
@@ -258,6 +260,11 @@ public class GameFragment extends Fragment {
                 mSmallTiles[i][pos].setLetter(words[i].charAt(j));
             }
         }
+    }
+
+    private void submitWord() {
+        String test = getState();
+        System.out.println(test + "bbbbbb");
     }
     private void setAvailableFromLastMove(int small) {
         clearAvailable();
