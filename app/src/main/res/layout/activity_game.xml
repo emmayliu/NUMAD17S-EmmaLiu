@@ -19,7 +19,7 @@
       android:scaleType="centerCrop"
       android:src="@drawable/backgroud2"/>
 
-    <LinearLayout
+    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:gravity="center"
@@ -40,7 +40,8 @@
           class="edu.neu.madcourse.numad17s_emmaliu.wordGame.GameFragment"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          tools:layout="@layout/fragment_game"/>
+          tools:layout="@layout/fragment_game"
+            android:layout_below="@+id/score" />
         <!-- Control fragment goes here... -->
  
        <fragment
@@ -48,8 +49,21 @@
           class="edu.neu.madcourse.numad17s_emmaliu.wordGame.ControlFragment"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          tools:layout="@layout/fragment_control"/>
+          tools:layout="@layout/fragment_control"
+           android:layout_below="@+id/fragment_game" />
 
-    </LinearLayout>
+        <TextView
+            android:text="@string/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/fragment_game"
+            android:layout_alignRight="@+id/fragment_game"
+            android:layout_alignEnd="@+id/fragment_game"
+            android:id="@+id/timer"
+            android:textStyle="normal|bold"
+            android:textColor="@color/purple_color"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
 
 </FrameLayout>

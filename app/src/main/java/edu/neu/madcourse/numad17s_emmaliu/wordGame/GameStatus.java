@@ -6,6 +6,7 @@ package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
 public class GameStatus {
     private static int score = 0;
+    private static int timeLeft = 30;
 
     public static void setScore (int updateScore) {
         score = updateScore;
@@ -13,5 +14,12 @@ public class GameStatus {
 
     public static int getScore () {
         return score;
+    }
+
+    public static void setTimeLeft(int time) {
+        timeLeft = time;
+    }
+    public static int getTimeLeft() {
+        return timeLeft;
     }
 }

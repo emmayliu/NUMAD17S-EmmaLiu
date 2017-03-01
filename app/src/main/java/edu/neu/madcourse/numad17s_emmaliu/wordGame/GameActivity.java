@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -29,8 +30,12 @@ public class GameActivity extends Activity {
     private MediaPlayer mMediaPlayer;
     private Handler mHandler = new Handler();
     private GameFragment mGameFragment;
+    private CountDownTimer countDownTimer;
+    public TextView scoreView;
+    public TextView timeView;
+    public int time;
 
-    TextView scoreView;
+    String TAG = "debug";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +44,9 @@ public class GameActivity extends Activity {
         mGameFragment = (GameFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_game);
         scoreView = (TextView) findViewById(R.id.score);
+        timeView = (TextView) findViewById(R.id.timer);
         boolean restore = getIntent().getBooleanExtra(KEY_RESTORE, false);
+        int timeLeft = GameStatus.getTimeLeft();
         if (restore) {
             String gameData = getPreferences(MODE_PRIVATE)
                     .getString(PREF_RESTORE, null);
@@ -48,9 +55,16 @@ public class GameActivity extends Activity {
                 int initialScore = GameStatus.getScore();
                 String s = "Score: " + Integer.toString(initialScore);
                 scoreView.setText(s);
+                String time = "Time: " + Integer.toString(timeLeft);
+                timeView.setText(time);
+                countDown(timeLeft);
             }
+
+        }else {
+            Log.d("wordGame", "restore = " + restore);
+            countDown(60000);
         }
-        Log.d("UT3", "restore = " + restore);
+
     }
 
     public void restartGame() {
@@ -76,6 +90,28 @@ public class GameActivity extends Activity {
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
                 .commit();
+        int timeLeft = time;
+        GameStatus.setTimeLeft(timeLeft);
+
         Log.d("UT3", "state = " + gameData);
+    }
+
+    public void countDown(long millisUntilFinished) {
+       Log.v(TAG , "i am inside timer countDown method");
+
+        countDownTimer = new CountDownTimer(millisUntilFinished, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                time = (int) millisUntilFinished;
+                long sec = millisUntilFinished / 1000;
+                timeView.setText("Time: " + String.valueOf(sec));
+            }
+
+            @Override
+            public void onFinish() {
+                timeView.setText("END");
+            }
+        }.start();
+
     }
 }

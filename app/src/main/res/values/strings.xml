@@ -38,6 +38,7 @@
     </string>
 
     <string name="score">Score: 0</string>
+    <string name="timer">Timer: 30s</string>
 
     <string name="app_name_ttt">UT3</string>
     <string name="long_app_name">Scroggle</string>
