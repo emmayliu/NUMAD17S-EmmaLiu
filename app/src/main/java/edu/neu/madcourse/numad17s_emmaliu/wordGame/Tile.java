@@ -20,6 +20,7 @@ import java.util.Arrays;
 import edu.neu.madcourse.numad17s_emmaliu.R;
 
 import static android.graphics.Color.BLUE;
+import static android.graphics.Color.TRANSPARENT;
 
 
 public class Tile {
@@ -32,6 +33,7 @@ public class Tile {
         SA, SB, SC, SD, SE, SF, SG, SH, SI, SJ, SK, SL, SM, SN, SO, SP,
         SQ, SR, SS, ST, SU, SV, SW, SX, SY, SZ
     }
+
 
     // These levels are defined in the drawable definitions
 
@@ -101,6 +103,9 @@ public class Tile {
     private View mView;
     private Tile mSubTiles[];
     private char letter;
+    private int isSelected;
+    private int backGroundColor;
+
 
 
 
@@ -109,19 +114,6 @@ public class Tile {
         this.mGame = game;
     }
 
-    public Tile deepCopy() {
-        Tile tile = new Tile(mGame);
-        tile.setOwner(getOwner());
-        if (getSubTiles() != null) {
-            Tile newTiles[] = new Tile[9];
-            Tile oldTiles[] = getSubTiles();
-            for (int child = 0; child < 9; child++) {
-                newTiles[child] = oldTiles[child].deepCopy();
-            }
-            tile.setSubTiles(newTiles);
-        }
-        return tile;
-    }
 
     public View getView() {
         return mView;
@@ -139,6 +131,24 @@ public class Tile {
         this.mOwner = owner;
     }
 
+    public int getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(int value) {
+        this.isSelected = value;
+    }
+
+    public void setBackGroundColor(int value) {
+        this.backGroundColor = value;
+    }
+
+    public int getBackGroundColor() {
+        return this.backGroundColor;
+    }
+
+
+
     public Tile[] getSubTiles() {
         return mSubTiles;
     }
@@ -152,6 +162,8 @@ public class Tile {
     }
     public void setLetter(char letter) {
         this.letter = letter;
+        this.isSelected = 0;
+        this.backGroundColor = 0;
         if (letter == 'A') {
             setOwner(Owner.A);
         }
@@ -233,6 +245,7 @@ public class Tile {
     }
 
     public void selectLetter() {
+        this.isSelected = 1;
         if (letter == 'A') setOwner(Owner.SA);
         if (letter == 'B') setOwner(Owner.SB);
         if (letter == 'C') setOwner(Owner.SC);
@@ -262,6 +275,37 @@ public class Tile {
         updateDrawableState();
     }
 
+    public void unSelectLetter() {
+        if (letter == 'A') setOwner(Owner.A);
+        if (letter == 'B') setOwner(Owner.B);
+        if (letter == 'C') setOwner(Owner.C);
+        if (letter == 'D') setOwner(Owner.D);
+        if (letter == 'E') setOwner(Owner.E);
+        if (letter == 'F') setOwner(Owner.F);
+        if (letter == 'G') setOwner(Owner.G);
+        if (letter == 'H') setOwner(Owner.H);
+        if (letter == 'I') setOwner(Owner.I);
+        if (letter == 'J') setOwner(Owner.J);
+        if (letter == 'K') setOwner(Owner.K);
+        if (letter == 'L') setOwner(Owner.L);
+        if (letter == 'M') setOwner(Owner.M);
+        if (letter == 'N') setOwner(Owner.N);
+        if (letter == 'O') setOwner(Owner.O);
+        if (letter == 'P') setOwner(Owner.P);
+        if (letter == 'Q') setOwner(Owner.Q);
+        if (letter == 'R') setOwner(Owner.R);
+        if (letter == 'S') setOwner(Owner.S);
+        if (letter == 'T') setOwner(Owner.T);
+        if (letter == 'U') setOwner(Owner.U);
+        if (letter == 'V') setOwner(Owner.V);
+        if (letter == 'W') setOwner(Owner.W);
+        if (letter == 'X') setOwner(Owner.X);
+        if (letter == 'Y') setOwner(Owner.Y);
+        if (letter == 'Z') setOwner(Owner.Z);
+        this.isSelected = 0;
+        getView().setBackgroundColor(View.GONE);
+    }
+
 
     public void updateDrawableState() {
         if (mView == null) return;
@@ -276,7 +320,11 @@ public class Tile {
     }
 
     public void changeBackground() {
+        this.backGroundColor = 1;
         getView().setBackgroundColor(BLUE);
+    }
+    public void removeBackgroud() {
+        getView().setBackgroundColor(TRANSPARENT);
     }
 
     private int getLevel() {

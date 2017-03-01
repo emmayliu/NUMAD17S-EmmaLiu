@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 
-import edu.neu.madcourse.numad17s_emmaliu.DictionaryActivity;
+import edu.neu.madcourse.numad17s_emmaliu.wordGame.GameStatus;
 import edu.neu.madcourse.numad17s_emmaliu.R;
 
 public class GameFragment extends Fragment {
@@ -44,11 +45,11 @@ public class GameFragment extends Fragment {
     static private int mSmallIds[] = {R.id.small1, R.id.small2, R.id.small3,
             R.id.small4, R.id.small5, R.id.small6, R.id.small7, R.id.small8,
             R.id.small9,};
-    private Handler mHandler = new Handler();
+    //private Handler mHandler = new Handler();
     private Tile mEntireBoard = new Tile(this);
     private Tile mLargeTiles[] = new Tile[9];
     private Tile mSmallTiles[][] = new Tile[9][9];
-    private Tile.Owner mPlayer = Tile.Owner.X;
+    //private Tile.Owner mPlayer = Tile.Owner.X;
     private Set<Tile> mAvailable = new HashSet<Tile>();
     private int mSoundX, mSoundO, mSoundMiss, mSoundRewind;
     private SoundPool mSoundPool;
@@ -63,9 +64,11 @@ public class GameFragment extends Fragment {
     private static String fileName = "";
     private Tile[][] userInputTiles = new Tile[9][9];
 
+
     private String errorTAG = "Error Log";
     private String debugTAG = "Debug ";
     private String TAG = "search word part";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,11 +76,13 @@ public class GameFragment extends Fragment {
         // Retain this fragment across configuration changes.
         setRetainInstance(true);
         initGame();
+
         mSoundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
         mSoundX = mSoundPool.load(getActivity(), R.raw.sergenious_movex, 1);
         mSoundO = mSoundPool.load(getActivity(), R.raw.sergenious_moveo, 1);
         mSoundMiss = mSoundPool.load(getActivity(), R.raw.erkanozan_miss, 1);
         mSoundRewind = mSoundPool.load(getActivity(), R.raw.joanne_rewind, 1);
+
     }
     private void initStringBuilder () {
         for (int i = 0;  i < 9; i++) {
@@ -120,7 +125,7 @@ public class GameFragment extends Fragment {
                 return true;
             }
             if (lasPos == small) {
-                return true;
+                return false;
             } else {
                 ArrayList<Integer> neighbors = map.get(lasPos);
                 for (int neighbor : neighbors) {
@@ -140,21 +145,34 @@ public class GameFragment extends Fragment {
                 inflater.inflate(R.layout.large_board, container, false);
         initViews(rootView);
         updateAllTiles();
+
         return rootView;
     }
 
-    private int[] initialStatus(int[] status) {
+    private void initialStatus() {
         for (int i = 0; i < status.length; i++) {
             status[i] = -1;
         }
-        return status;
     }
 
+    private void initUserInputTiles() {
+        for (int i = 0; i < userInputTiles.length; i++) {
+            for (int j = 0; j < userInputTiles[i].length; j++) {
+                if(userInputTiles[i][j] != null) {
+                    userInputTiles[i][j].removeBackgroud();
+                }
+                userInputTiles[i][j] = null;
+            }
+        }
+    }
+
+
     private void initViews(View rootView) {
+        Log.e(debugTAG, "I am inside initViews");
+
         mEntireBoard.setView(rootView);
-        addAllNeighbors();
-        status = initialStatus(status);
-        initStringBuilder();
+
+
         for (int large = 0; large < 9; large++) {
             View outer = rootView.findViewById(mLargeIds[large]);
             mLargeTiles[large].setView(outer);
@@ -167,13 +185,18 @@ public class GameFragment extends Fragment {
 
                 final Tile smallTile = mSmallTiles[large][small];
                 smallTile.setView(inner);
-
+                int bc = smallTile.getBackGroundColor();
+                Log.e(TAG, Integer.toString(bc));
+                if (bc == 1) {
+                    smallTile.changeBackground();
+                }
                 // ...
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // ...
-                        if (isValidMove(mLastLarge, fLarge, fSmall)) {
+                        int isSelect = smallTile.getIsSelected();
+                        if (isValidMove(mLastLarge, fLarge, fSmall) && (isSelect == 0) ) {
                             smallTile.animate();
                             smallTile.selectLetter();
                             mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
@@ -190,19 +213,25 @@ public class GameFragment extends Fragment {
                             // verify word
                             Log.e(errorTAG, inputWord);
                             if (searchWord(inputWord)) {
+
                                 for (Tile tile : userInputTiles[fLarge]) {
                                     if (tile != null) {
                                         tile.changeBackground();
+                                        tile.setBackGroundColor(1);
                                     }
                                 }
-                                Log.v(debugTAG, "found the word");
+                                int myScore = GameStatus.getScore();
+                                myScore += increaseScore(inputWord);
+                                GameStatus.setScore(myScore);
+                                String value = "Score: " + Integer.toString(myScore);
+                                TextView textView = (TextView) getActivity().findViewById(R.id.score);
+                                textView.setText(value);
                             } else {
                                 Log.v(debugTAG, "not a word");
                             }
-
-
                         } else {
                             mSoundPool.play(mSoundMiss, mVolume, mVolume, 1, 0, 1f);
+                            Log.e(debugTAG, "is selcted");
                         }
                     }
                 });
@@ -216,13 +245,25 @@ public class GameFragment extends Fragment {
     public void restartGame() {
         mSoundPool.play(mSoundRewind, mVolume, mVolume, 1, 0, 1f);
         // ...
-        initGame();
-        initViews(getView());
+        initialStatus();
+        initStringBuilder();
+        initUserInputTiles();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                mSmallTiles[i][j].unSelectLetter();
+            }
+        }
+        fillWithWords();
         updateAllTiles();
     }
 
     public void initGame() {
         Log.e("word game", "init game");
+        addAllNeighbors();
+        initialStatus();
+        initStringBuilder();
+        initUserInputTiles();
+
         mEntireBoard = new Tile(this);
         // Create all the tiles
         for (int large = 0; large < 9; large++) {
@@ -263,6 +304,28 @@ public class GameFragment extends Fragment {
         Random rand = new Random();
         int num = rand.nextInt(999) + 0;
         return num;
+    }
+
+    /**
+     * we can design a lot of rules here to make the game addictive
+     */
+    private int increaseScore(String word) {
+        int score = 0;
+        CharSequence c = "word";
+        char magicLetter = 'y';
+
+        if (word.length() == 9) {
+            score += 100;
+        } else if (word.contains(c)) {
+            score += 200;
+        } else if (word.length() >= 6) {
+            score += 60;
+        } else if (word.indexOf(magicLetter) != -1){
+            score += 100;
+        } else {
+            score += 20;
+        }
+        return score;
     }
 
     public boolean searchWord(String s) {
@@ -389,6 +452,9 @@ public class GameFragment extends Fragment {
         for (int large = 0; large < 9; large++) {
             mLargeTiles[large].updateDrawableState();
             for (int small = 0; small < 9; small++) {
+                if(mSmallTiles[large][small].getBackGroundColor() == 1) {
+                    mSmallTiles[large][small].changeBackground();
+                }
                 mSmallTiles[large][small].updateDrawableState();
             }
         }
@@ -401,10 +467,20 @@ public class GameFragment extends Fragment {
         builder.append(',');
         builder.append(mLastSmall);
         builder.append(',');
+
+
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
+                builder.append(mSmallTiles[large][small].getLetter());
+                builder.append(',');
                 builder.append(mSmallTiles[large][small].getOwner().name());
                 builder.append(',');
+                builder.append(mSmallTiles[large][small].getIsSelected());
+                builder.append(',');
+                builder.append(mSmallTiles[large][small].getBackGroundColor());
+                builder.append(',');
+
+
             }
         }
         return builder.toString();
@@ -418,8 +494,17 @@ public class GameFragment extends Fragment {
         mLastSmall = Integer.parseInt(fields[index++]);
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
+                Character letter = fields[index++].charAt(0);
+                mSmallTiles[large][small].setLetter(letter);
                 Tile.Owner owner = Tile.Owner.valueOf(fields[index++]);
                 mSmallTiles[large][small].setOwner(owner);
+                String s = fields[index++];
+                int value = Integer.valueOf(s);
+                mSmallTiles[large][small].setIsSelected(value);
+                String color = fields[index++];
+                int c = Integer.valueOf(color);
+                mSmallTiles[large][small].setBackGroundColor(c);
+
             }
         }
         setAvailableFromLastMove(mLastSmall);

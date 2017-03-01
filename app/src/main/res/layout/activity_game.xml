@@ -19,27 +19,37 @@
       android:scaleType="centerCrop"
       android:src="@drawable/backgroud2"/>
 
-   <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:orientation="vertical">
+    <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:gravity="center"
+       android:orientation="vertical">
 
-      <fragment
-         android:id="@+id/fragment_game"
-         class="edu.neu.madcourse.numad17s_emmaliu.wordGame.GameFragment"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         tools:layout="@layout/fragment_game"/>
-      <!-- Control fragment goes here... -->
+        <TextView
+            android:text="@string/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/score"
+            android:layout_marginRight="130dp"
+            android:textStyle="normal|bold"
+            android:textSize="18sp"
+            android:textColor="@color/purple_color" />
 
-      <fragment
-         android:id="@+id/fragment_game_controls"
-         class="edu.neu.madcourse.numad17s_emmaliu.wordGame.ControlFragment"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         tools:layout="@layout/fragment_control"/>
+        <fragment
+          android:id="@+id/fragment_game"
+          class="edu.neu.madcourse.numad17s_emmaliu.wordGame.GameFragment"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          tools:layout="@layout/fragment_game"/>
+        <!-- Control fragment goes here... -->
+ 
+       <fragment
+          android:id="@+id/fragment_game_controls"
+          class="edu.neu.madcourse.numad17s_emmaliu.wordGame.ControlFragment"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          tools:layout="@layout/fragment_control"/>
 
-   </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>
