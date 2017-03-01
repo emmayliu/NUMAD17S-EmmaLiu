@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.media.MediaPlayer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -63,6 +64,7 @@ public class GameFragment extends Fragment {
     private boolean[][][] visited = new boolean[26][26][26];
     private static String fileName = "";
     private Tile[][] userInputTiles = new Tile[9][9];
+    private MediaPlayer mediaPlayer;
 
 
     private String errorTAG = "Error Log";

@@ -23,22 +23,21 @@ public class MainActivity extends Activity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_menu);
+      GameStatus.startPlaying();
+
    }
 
    @Override
    protected void onResume() {
       super.onResume();
-      mMediaPlayer = MediaPlayer.create(this, R.raw.office);
-      mMediaPlayer.setVolume(0.5f, 0.5f);
-      mMediaPlayer.setLooping(true);
-      mMediaPlayer.start();
+      GameStatus.stopMusic();
+      GameStatus.playMusic(this, R.raw.office);
+
    }
 
    @Override
    protected void onPause() {
       super.onPause();
-      mMediaPlayer.stop();
-      mMediaPlayer.reset();
-      mMediaPlayer.release();
+      GameStatus.stopMusic();
    }
 }

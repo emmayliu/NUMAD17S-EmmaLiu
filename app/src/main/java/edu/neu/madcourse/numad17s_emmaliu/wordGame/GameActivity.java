@@ -31,6 +31,7 @@ public class GameActivity extends Activity {
     private MediaPlayer mMediaPlayer;
     private Handler mHandler = new Handler();
     private GameFragment mGameFragment;
+    private ControlFragment controlFragment;
     private CountDownTimer countDownTimer;
     public TextView scoreView;
     public TextView timeView;
@@ -46,6 +47,7 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
         mGameFragment = (GameFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_game);
+        controlFragment = (ControlFragment) getFragmentManager().findFragmentById(R.id.fragment_game_controls);
         scoreView = (TextView) findViewById(R.id.score);
         timeView = (TextView) findViewById(R.id.timer);
         tooggleB = (ToggleButton) findViewById(R.id.toggleButton);
@@ -88,10 +90,18 @@ public class GameActivity extends Activity {
         if (on) {
             onPause();
             mGameFragment.getView().setVisibility(View.GONE);
+            controlFragment.getView().setVisibility(View.GONE);
+            timeView.setVisibility(View.INVISIBLE);
+            scoreView.setVisibility(View.INVISIBLE);
+            GameStatus.pauseMusic();
+
         } else {
             countDown(time);
             mGameFragment.getView().setVisibility(View.VISIBLE);
-            Log.e(TAG, "Emma da mei nv");
+            controlFragment.getView().setVisibility(View.VISIBLE);
+            timeView.setVisibility(View.VISIBLE);
+            scoreView.setVisibility(View.VISIBLE);
+            GameStatus.resumeMusic();
         }
     }
 
