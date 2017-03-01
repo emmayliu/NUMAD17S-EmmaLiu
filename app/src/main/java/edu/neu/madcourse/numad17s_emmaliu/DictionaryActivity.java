@@ -2,6 +2,7 @@ package edu.neu.madcourse.numad17s_emmaliu;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.content.Context;
 
 
 import java.io.BufferedReader;
@@ -30,10 +32,10 @@ public class DictionaryActivity extends AppCompatActivity  {
     private EditText editText;
     private ToneGenerator toneGenerator;
     private ArrayList<String> words = new ArrayList<>();
-    String inputWord = "";
-    Trie trie = new Trie();
-    String fileName = "";
-    boolean[][][] visited = new boolean[26][26][26];
+    private static String inputWord = "";
+    private static Trie trie = new Trie();
+    private static String fileName = "";
+    private static boolean[][][] visited = new boolean[26][26][26];
 
 
     @Override
@@ -58,6 +60,7 @@ public class DictionaryActivity extends AppCompatActivity  {
 
             }
         });
+
 
 
         editText = (EditText) findViewById(R.id.editText);
@@ -105,8 +108,11 @@ public class DictionaryActivity extends AppCompatActivity  {
                     Log.e(TAG, "Not valid input");
                 }
             }
+
         });
     }
+
+
 
     public void readData(String fileName) throws IOException {
         try {
@@ -127,7 +133,7 @@ public class DictionaryActivity extends AppCompatActivity  {
         }
     }
 
-    public boolean isAlpha (String s) {
+    public static boolean isAlpha (String s) {
         return s.matches("[a-z]+");
     }
 

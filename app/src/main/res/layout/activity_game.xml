@@ -42,6 +42,4 @@
 
    </LinearLayout>
 
-   <include layout="@layout/thinking"/>
-
 </FrameLayout>

@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
+
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
 
@@ -33,6 +35,7 @@ public class GameActivity extends Activity {
       setContentView(R.layout.activity_game);
       mGameFragment = (GameFragment) getFragmentManager()
             .findFragmentById(R.id.fragment_game);
+
       boolean restore = getIntent().getBooleanExtra(KEY_RESTORE, false);
       if (restore) {
          String gameData = getPreferences(MODE_PRIVATE)
@@ -47,6 +50,7 @@ public class GameActivity extends Activity {
    public void restartGame() {
       mGameFragment.restartGame();
    }
+
 
   /* public void reportWinner(final Tile.Owner winner) {
       AlertDialog.Builder builder = new AlertDialog.Builder(this);

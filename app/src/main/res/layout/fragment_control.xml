@@ -17,24 +17,22 @@
 
    <Button
        android:id="@+id/button_restart"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
        android:layout_marginTop="10dp"
        android:drawableTop="@drawable/restart_small"
-       android:text="@string/restart_label"/>
+       android:text="@string/restart_label"
+       style="@style/MyButtonStyleSmall"/>
 
    <Button
        android:id="@+id/button_main"
+       android:minHeight="0dp"
+       android:minWidth="0dp"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:layout_marginTop="10dp"
        android:drawableTop="@drawable/home_small"
-       android:text="@string/main_menu_label"/>
-   <Button
-       android:id="@+id/button_check"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_marginTop="10dp"
-       android:layout_marginLeft="50dp"
-       android:drawableTop="@drawable/check"/>
+       android:text="@string/main_menu_label"
+       style="@style/MyButtonStyleSmall"/>
+
 </LinearLayout>

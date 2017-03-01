@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 
+import edu.neu.madcourse.numad17s_emmaliu.DictionaryActivity;
 import edu.neu.madcourse.numad17s_emmaliu.R;
 
 public class GameFragment extends Fragment {
@@ -55,7 +57,15 @@ public class GameFragment extends Fragment {
     private int mLastSmall;
     private Map<Integer, ArrayList<Integer>> map = new HashMap<>();
     private int[] status = new int[9];
+    private StringBuilder[] sbArr = new StringBuilder[9];
+    private Trie trie = new Trie();
+    private boolean[][][] visited = new boolean[26][26][26];
+    private static String fileName = "";
+    private Tile[][] userInputTiles = new Tile[9][9];
 
+    private String errorTAG = "Error Log";
+    private String debugTAG = "Debug ";
+    private String TAG = "search word part";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +78,11 @@ public class GameFragment extends Fragment {
         mSoundO = mSoundPool.load(getActivity(), R.raw.sergenious_moveo, 1);
         mSoundMiss = mSoundPool.load(getActivity(), R.raw.erkanozan_miss, 1);
         mSoundRewind = mSoundPool.load(getActivity(), R.raw.joanne_rewind, 1);
+    }
+    private void initStringBuilder () {
+        for (int i = 0;  i < 9; i++) {
+            sbArr[i] = new StringBuilder("");
+        }
     }
 
     private void clearAvailable() {
@@ -139,6 +154,7 @@ public class GameFragment extends Fragment {
         mEntireBoard.setView(rootView);
         addAllNeighbors();
         status = initialStatus(status);
+        initStringBuilder();
         for (int large = 0; large < 9; large++) {
             View outer = rootView.findViewById(mLargeIds[large]);
             mLargeTiles[large].setView(outer);
@@ -166,7 +182,24 @@ public class GameFragment extends Fragment {
                             mLastSmall = fSmall;
                             status[fLarge] = fSmall;
 
-                            System.out.println(smallTile.toString() + "bbbbbbb");
+                            char c = smallTile.getLetter();
+                            sbArr[fLarge].append(c);
+                            String inputWord = sbArr[fLarge].toString();
+                            userInputTiles[fLarge][fSmall] = smallTile;
+
+                            // verify word
+                            Log.e(errorTAG, inputWord);
+                            if (searchWord(inputWord)) {
+                                for (Tile tile : userInputTiles[fLarge]) {
+                                    if (tile != null) {
+                                        tile.changeBackground();
+                                    }
+                                }
+                                Log.v(debugTAG, "found the word");
+                            } else {
+                                Log.v(debugTAG, "not a word");
+                            }
+
 
                         } else {
                             mSoundPool.play(mSoundMiss, mVolume, mVolume, 1, 0, 1f);
@@ -232,6 +265,69 @@ public class GameFragment extends Fragment {
         return num;
     }
 
+    public boolean searchWord(String s) {
+        s = s.toLowerCase();
+        if (isAlpha(s)) {
+            if (s.length() >= 3) {
+                fileName = s.substring(0, 3);
+                int a = fileName.charAt(0) - 'a';
+                int b = fileName.charAt(1) - 'a';
+                int c = fileName.charAt(2) - 'a';
+
+
+                if (!visited[a][b][c]) {
+                    try {
+                        visited[a][b][c] = true;
+                        Log.e(TAG, fileName + "I am here before open file");
+                        readDataForWordGame(fileName);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                if (trie.search(s)) {
+                    //toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
+                    Log.e(TAG, " found the word");
+                    return true;
+                } else {
+                    Log.e(TAG, "word" + s + " doesn't exist in dictionary");
+                    return false;
+                }
+            }
+        } else {
+            Log.e(TAG, "Not valid input");
+        }
+        return false;
+    }
+
+
+    public void readDataForWordGame(String fileName) throws IOException {
+        Log.e(TAG, fileName + "fileName");
+        try {
+            AssetManager manager = getResources().getAssets();
+            InputStream is = manager.open(fileName + ".txt");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                if (line.length() <= 9) {
+                    trie.insert(line.split("\n")[0]);
+                }
+
+            }
+            Log.e(TAG, " wordGame trie build complete");
+
+            reader.close();
+            is.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static boolean isAlpha (String s) {
+        return s.matches("[a-z]+");
+    }
+
 
 
     private void fillWithWords() {
@@ -262,10 +358,6 @@ public class GameFragment extends Fragment {
         }
     }
 
-    private void submitWord() {
-        String test = getState();
-        System.out.println(test + "bbbbbb");
-    }
     private void setAvailableFromLastMove(int small) {
         clearAvailable();
         // Make all the tiles at the destination available

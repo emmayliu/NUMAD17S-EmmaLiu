@@ -70,7 +70,7 @@ public class ScrollingView extends View {
          mBackground.setBounds(0, 0, contentWidth * 4, contentHeight * 4);
 
          // Shift where the image will be drawn
-         mScrollPos += 2;
+         mScrollPos += 10;
          if (mScrollPos >= max) mScrollPos -= max;
          canvas.translate(-mScrollPos, -mScrollPos);
 
