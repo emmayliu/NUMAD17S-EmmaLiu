@@ -64,6 +64,19 @@
             android:textColor="@color/purple_color"
             android:textSize="18sp" />
 
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/fragment_game_controls"
+            android:layout_alignRight="@+id/fragment_game"
+            android:layout_alignEnd="@+id/fragment_game"
+            android:layout_marginRight="17dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginBottom="44dp"
+            android:textOn="@string/off"
+            android:textOff="@string/on"
+            android:id="@+id/toggleButton" />
+
     </RelativeLayout>
 
 </FrameLayout>

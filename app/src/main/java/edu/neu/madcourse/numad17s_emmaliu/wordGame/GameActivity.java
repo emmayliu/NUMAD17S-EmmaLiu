@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
@@ -33,7 +34,9 @@ public class GameActivity extends Activity {
     private CountDownTimer countDownTimer;
     public TextView scoreView;
     public TextView timeView;
+    public ToggleButton tooggleB;
     public int time;
+
 
     String TAG = "debug";
 
@@ -45,14 +48,23 @@ public class GameActivity extends Activity {
                 .findFragmentById(R.id.fragment_game);
         scoreView = (TextView) findViewById(R.id.score);
         timeView = (TextView) findViewById(R.id.timer);
+        tooggleB = (ToggleButton) findViewById(R.id.toggleButton);
+        tooggleB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onToggleClicked(v);
+            }
+        });
         boolean restore = getIntent().getBooleanExtra(KEY_RESTORE, false);
         int timeLeft = GameStatus.getTimeLeft();
+        int initialScore = GameStatus.getScore();
+
         if (restore) {
             String gameData = getPreferences(MODE_PRIVATE)
                     .getString(PREF_RESTORE, null);
             if (gameData != null) {
                 mGameFragment.putState(gameData);
-                int initialScore = GameStatus.getScore();
+
                 String s = "Score: " + Integer.toString(initialScore);
                 scoreView.setText(s);
                 String time = "Time: " + Integer.toString(timeLeft);
@@ -71,27 +83,42 @@ public class GameActivity extends Activity {
         mGameFragment.restartGame();
     }
 
+    public void onToggleClicked(View view) {
+        boolean on = ((ToggleButton) view).isChecked();
+        if (on) {
+            onPause();
+            mGameFragment.getView().setVisibility(View.GONE);
+        } else {
+            countDown(time);
+            mGameFragment.getView().setVisibility(View.VISIBLE);
+            Log.e(TAG, "Emma da mei nv");
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         mMediaPlayer = MediaPlayer.create(this, R.raw.yankee);
         mMediaPlayer.setLooping(true);
         mMediaPlayer.start();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mHandler.removeCallbacks(null);
-        mMediaPlayer.stop();
-        mMediaPlayer.reset();
-        mMediaPlayer.release();
         String gameData = mGameFragment.getState();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
-                .commit();
+                .apply();
         int timeLeft = time;
         GameStatus.setTimeLeft(timeLeft);
+        String score = (String) scoreView.getText();
+        score = score.substring(7);
+        int num = Integer.valueOf(score);
+        GameStatus.setScore(num);
+        countDownTimer.cancel();
 
         Log.d("UT3", "state = " + gameData);
     }
