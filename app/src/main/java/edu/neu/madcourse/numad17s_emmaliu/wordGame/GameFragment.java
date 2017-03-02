@@ -191,7 +191,7 @@ public class GameFragment extends Fragment {
                 final Tile smallTile = mSmallTiles[large][small];
                 smallTile.setView(inner);
                 int bc = smallTile.getBackGroundColor();
-                Log.e(TAG, Integer.toString(bc));
+                //Log.e(TAG, Integer.toString(bc));
                 if (bc == 1) {
                     smallTile.changeBackground();
                 }
@@ -202,48 +202,16 @@ public class GameFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         // ...
-                        int isSelect = smallTile.getIsSelected();
-                        String ownerName = smallTile.getOwner().name();
-                        if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelect == 0) &&
-                                !(ownerName.equals("NEITHER"))) {
-                            smallTile.animate();
-                            smallTile.selectLetter();
-                            mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
-                            //makeMove(fLarge, fSmall);
-                            mLastLarge = fLarge;
-                            mLastSmall = fSmall;
-                            status[fLarge] = fSmall;
+                        String s = Integer.toString(GameStatus.getStage());
+                        Log.e(TAG, s);
 
-                            char c = smallTile.getLetter();
-                            sbArr[fLarge].append(c);
-                            String inputWord = sbArr[fLarge].toString();
-                            userInputTiles[fLarge][fSmall] = smallTile;
-
-
-                            // verify word
-                            //Log.e(errorTAG, inputWord);
-                            if (searchWord(inputWord)) {
-                                for (Tile tile : userInputTiles[fLarge]) {
-                                    if (tile != null) {
-                                        tile.changeBackground();
-                                        tile.setBackGroundColor(1);
-                                    }
-                                }
-                                int myScore = GameStatus.getScore();
-
-                                myScore += increaseScore(inputWord, 1);
-                                GameStatus.setScore(myScore);
-                                String value = "Score: " + Integer.toString(myScore);
-                                TextView textView = (TextView) getActivity()
-                                        .findViewById(R.id.score);
-                                textView.setText(value);
-                            } else {
-                                Log.v(debugTAG, "not a word");
-                            }
-                        } else {
-                            mSoundPool.play(mSoundMiss, mVolume, mVolume, 1, 0, 1f);
-                            Log.e(debugTAG, "is selcted");
+                        if (GameStatus.getStage() == 1) {
+                            playGamePhase1(fLarge, fSmall, smallTile, stage);
+                        } else if (GameStatus.getStage() == 2){
+                            Log.e(TAG, " stage two code");
                         }
+
+
                     }
                 });
                 // ...
@@ -251,8 +219,53 @@ public class GameFragment extends Fragment {
         }
     }
 
-    
+    public void playGamePhase1(int fLarge, int fSmall, Tile smallTile, int stage) {
+        String name = smallTile.getOwner().name();
+        int isSelect = smallTile.getIsSelected();
+        if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelect == 0) &&
+                !(name.equals("NEITHER"))) {
+            smallTile.animate();
+            smallTile.selectLetter();
+            mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
 
+
+
+            //makeMove(fLarge, fSmall);
+            mLastLarge = fLarge;
+            mLastSmall = fSmall;
+            status[fLarge] = fSmall;
+
+            char c = smallTile.getLetter();
+            sbArr[fLarge].append(c);
+            String inputWord = sbArr[fLarge].toString();
+            userInputTiles[fLarge][fSmall] = smallTile;
+
+
+            // verify word
+            //Log.e(errorTAG, inputWord);
+            if (searchWord(inputWord)) {
+                for (Tile tile : userInputTiles[fLarge]) {
+                    if (tile != null) {
+                        tile.changeBackground();
+                        tile.setBackGroundColor(1);
+                    }
+                }
+                int myScore = GameStatus.getScore();
+
+                myScore += increaseScore(inputWord, 1);
+                GameStatus.setScore(myScore);
+                String value = "Score: " + Integer.toString(myScore);
+                TextView textView = (TextView) getActivity()
+                        .findViewById(R.id.score);
+                textView.setText(value);
+            } else {
+                Log.v(debugTAG, "not a word");
+            }
+        } else {
+            mSoundPool.play(mSoundMiss, mVolume, mVolume, 1, 0, 1f);
+            Log.e(debugTAG, "is selcted");
+        }
+    }
 
     public void startGamestage2() {
         GameStatus.setStage(2);
