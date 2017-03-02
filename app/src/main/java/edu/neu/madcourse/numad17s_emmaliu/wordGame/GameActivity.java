@@ -16,6 +16,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -36,9 +37,8 @@ public class GameActivity extends Activity {
     public TextView scoreView;
     public TextView timeView;
     public ToggleButton tooggleB;
+    public GameStatus gs = new GameStatus();
     public int time;
-
-
     String TAG = "debug";
 
     @Override
@@ -47,7 +47,8 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
         mGameFragment = (GameFragment) getFragmentManager()
                 .findFragmentById(R.id.fragment_game);
-        controlFragment = (ControlFragment) getFragmentManager().findFragmentById(R.id.fragment_game_controls);
+        controlFragment = (ControlFragment) getFragmentManager()
+                .findFragmentById(R.id.fragment_game_controls);
         scoreView = (TextView) findViewById(R.id.score);
         timeView = (TextView) findViewById(R.id.timer);
         tooggleB = (ToggleButton) findViewById(R.id.toggleButton);
@@ -76,7 +77,7 @@ public class GameActivity extends Activity {
 
         }else {
             Log.d("wordGame", "restore = " + restore);
-            countDown(60000);
+            countDown(20000);
         }
 
     }
@@ -93,7 +94,7 @@ public class GameActivity extends Activity {
             controlFragment.getView().setVisibility(View.GONE);
             timeView.setVisibility(View.INVISIBLE);
             scoreView.setVisibility(View.INVISIBLE);
-            GameStatus.pauseMusic();
+            gs.pauseMusic();
 
         } else {
             countDown(time);
@@ -101,7 +102,10 @@ public class GameActivity extends Activity {
             controlFragment.getView().setVisibility(View.VISIBLE);
             timeView.setVisibility(View.VISIBLE);
             scoreView.setVisibility(View.VISIBLE);
-            GameStatus.resumeMusic();
+            int length =(int) gs.getCurrentPosition();
+            mMediaPlayer.seekTo(length);
+            mMediaPlayer.start();
+
         }
     }
 
@@ -119,6 +123,7 @@ public class GameActivity extends Activity {
         super.onPause();
         mHandler.removeCallbacks(null);
         String gameData = mGameFragment.getState();
+        mMediaPlayer.pause();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
                 .apply();
@@ -146,7 +151,12 @@ public class GameActivity extends Activity {
 
             @Override
             public void onFinish() {
-                timeView.setText("END");
+                timeView.setText("Stage 2");
+                if (GameStatus.getStage() == 1) {
+                    countDown(10000);
+                } else {
+                    timeView.setText("End");
+                }
             }
         }.start();
 

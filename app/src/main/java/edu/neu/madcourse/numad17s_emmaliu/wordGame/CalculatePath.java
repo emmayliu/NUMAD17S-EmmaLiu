@@ -15,9 +15,10 @@ import java.util.Set;
 /**
  * Created by emma on 2/27/17.
  * I was trying to put word into board by generating path in real time, but it's time consuming and
- * hurt app performance. So I decided to write this separate class to generate all possible valid path
+ * hurt app performance. So I decided to write this separate class to generate all
+ * possible valid path
  * and randomly return 9 path for assigned word into board
- * For each start point from 0 - 8, there is more than 32 ways to arrange letters.
+ * For each start point from 0 - 8, there is at least 32 ways to arrange letters in one grid.
  */
 
 public class CalculatePath {
@@ -59,7 +60,9 @@ public class CalculatePath {
         return number;
     }
 
-    public static void generatePathHelper(Map<Integer, ArrayList<Integer>> map, Set<Integer> set, int pos, ArrayList<String> paths, ArrayList<Integer> path) {
+    public static void generatePathHelper(Map<Integer, ArrayList<Integer>> map, Set<Integer> set,
+                                          int pos, ArrayList<String> paths,
+                                          ArrayList<Integer> path) {
 
 
         if (path.size() == 9) {

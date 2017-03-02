@@ -67,7 +67,8 @@ public class AboutActivity extends AppCompatActivity {
 
                     Log.v(TAG, "user give the permission!");
 
-                    TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                    TelephonyManager tm
+                            = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                     TextView textView = (TextView) findViewById(R.id.phoneId);
                     if (tm.getDeviceId() != null) {
                         textView.setText(tm.getDeviceId());

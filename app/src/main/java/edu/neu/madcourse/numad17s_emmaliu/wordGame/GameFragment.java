@@ -118,23 +118,25 @@ public class GameFragment extends Fragment {
         map.put(8, new ArrayList<>(Arrays.asList(4, 5, 7)));
     }
 
-    private boolean isValidMove(int mLastLarge, int large, int small) {
-        if (mLastLarge == -1) {
-            return true;
-        } else {
-            int lasPos = status[large];
-            if (lasPos == -1) {
-                return true;
+    private boolean isValidMove(int mLastLarge, int large, int small, int GameStage) {
+        int lasPos = status[large];
+
+        if (mLastLarge == -1) return true;
+        if (lasPos == -1) return true;
+        if (lasPos == small) return false;
+        if (GameStage == 1) {
+            ArrayList<Integer> neighbors = map.get(lasPos);
+            for (int neighbor : neighbors) {
+                if (neighbor == small) {
+                    return true;
+                }
+            }
+        } else if (GameStage == 2) {
+            if(mSmallTiles[large][small].getOwner().name() == "NEIGHTER") {
+                return false;
             }
             if (lasPos == small) {
                 return false;
-            } else {
-                ArrayList<Integer> neighbors = map.get(lasPos);
-                for (int neighbor : neighbors) {
-                    if (neighbor == small) {
-                        return true;
-                    }
-                }
             }
         }
         return false;
@@ -174,10 +176,14 @@ public class GameFragment extends Fragment {
 
         mEntireBoard.setView(rootView);
 
-
+        final int stage = GameStatus.getStage();
         for (int large = 0; large < 9; large++) {
             View outer = rootView.findViewById(mLargeIds[large]);
             mLargeTiles[large].setView(outer);
+
+            if (stage == 2) {
+                startGamestage2();
+            }
 
             for (int small = 0; small < 9; small++) {
                 ImageButton inner = (ImageButton) outer.findViewById
@@ -192,13 +198,15 @@ public class GameFragment extends Fragment {
                 if (bc == 1) {
                     smallTile.changeBackground();
                 }
+
+
                 // ...
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // ...
                         int isSelect = smallTile.getIsSelected();
-                        if (isValidMove(mLastLarge, fLarge, fSmall) && (isSelect == 0) ) {
+                        if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelect == 0) ) {
                             smallTile.animate();
                             smallTile.selectLetter();
                             mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
@@ -213,7 +221,7 @@ public class GameFragment extends Fragment {
                             userInputTiles[fLarge][fSmall] = smallTile;
 
                             // verify word
-                            Log.e(errorTAG, inputWord);
+                            //Log.e(errorTAG, inputWord);
                             if (searchWord(inputWord)) {
 
                                 for (Tile tile : userInputTiles[fLarge]) {
@@ -223,10 +231,12 @@ public class GameFragment extends Fragment {
                                     }
                                 }
                                 int myScore = GameStatus.getScore();
-                                myScore += increaseScore(inputWord);
+
+                                myScore += increaseScore(inputWord, 1);
                                 GameStatus.setScore(myScore);
                                 String value = "Score: " + Integer.toString(myScore);
-                                TextView textView = (TextView) getActivity().findViewById(R.id.score);
+                                TextView textView = (TextView) getActivity()
+                                        .findViewById(R.id.score);
                                 textView.setText(value);
                             } else {
                                 Log.v(debugTAG, "not a word");
@@ -243,6 +253,25 @@ public class GameFragment extends Fragment {
     }
 
 
+    public void startGamestage2() {
+        removeUnConfirmedWords();
+        GameStatus.setStage(2);
+
+
+    }
+
+    public void removeUnConfirmedWords () {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (mSmallTiles[i][j].getBackGroundColor() != 1) {
+                    mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
+                } else {
+                    mSmallTiles[i][j].removeBackgroud();
+                    mSmallTiles[i][j].unSelectLetter();
+                }
+            }
+        }
+    }
 
     public void restartGame() {
         mSoundPool.play(mSoundRewind, mVolume, mVolume, 1, 0, 1f);
@@ -311,21 +340,32 @@ public class GameFragment extends Fragment {
     /**
      * we can design a lot of rules here to make the game addictive
      */
-    private int increaseScore(String word) {
+    private int increaseScore(String word, int stage) {
         int score = 0;
         CharSequence c = "word";
-        char magicLetter = 'y';
-
-        if (word.length() == 9) {
-            score += 100;
-        } else if (word.contains(c)) {
-            score += 200;
-        } else if (word.length() >= 6) {
-            score += 60;
-        } else if (word.indexOf(magicLetter) != -1){
-            score += 100;
+        if (stage == 1) {
+            char magicLetter = 'y';
+            if (word.length() == 9) {
+                score += 100;
+            } else if (word.contains(c)) {
+                score += 200;
+            }else if (word.indexOf(magicLetter) != -1){
+                score += 100;
+            }  else if (word.length() >= 6) {
+                score += 60;
+            } else if (word.length() >= 4)  {
+                score += 40;
+            } else {
+                score += 20;
+            }
         } else {
-            score += 20;
+            if (word.length() == 9) {
+                score += 500;
+            } else if (word.length() >= 6) {
+                score += 200;
+            } else {
+                score += 100;
+            }
         }
         return score;
     }

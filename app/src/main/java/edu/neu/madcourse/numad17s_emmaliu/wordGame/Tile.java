@@ -131,6 +131,7 @@ public class Tile {
         this.mOwner = owner;
     }
 
+
     public int getIsSelected() {
         return isSelected;
     }
@@ -508,7 +509,9 @@ public class Tile {
     @Override
     public String toString() {
         String s = "";
-        s = s + "mGame : " + mGame + " letter : " + letter + " mSubTiles " + Arrays.toString(mSubTiles);
+        s = s + "mGame : " + mGame
+                + " letter : " + letter
+                + " mSubTiles " + Arrays.toString(mSubTiles);
         return s;
     }
 }

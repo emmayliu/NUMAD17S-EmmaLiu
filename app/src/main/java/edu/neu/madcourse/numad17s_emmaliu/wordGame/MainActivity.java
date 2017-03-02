@@ -18,26 +18,27 @@ import edu.neu.madcourse.numad17s_emmaliu.R;
 public class MainActivity extends Activity {
    MediaPlayer mMediaPlayer;
    // ...
+   GameStatus gs = new GameStatus();
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_menu);
-      GameStatus.startPlaying();
+      gs.startPlaying();
 
    }
 
    @Override
    protected void onResume() {
       super.onResume();
-      GameStatus.stopMusic();
-      GameStatus.playMusic(this, R.raw.office);
+      gs.stopMusic();
+      gs.playMusic(this, R.raw.office);
 
    }
 
    @Override
    protected void onPause() {
       super.onPause();
-      GameStatus.stopMusic();
+      gs.stopMusic();
    }
 }
