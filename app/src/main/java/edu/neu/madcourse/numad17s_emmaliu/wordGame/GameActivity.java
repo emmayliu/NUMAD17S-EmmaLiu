@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -39,6 +40,7 @@ public class GameActivity extends Activity {
     public ToggleButton tooggleB;
     public GameStatus gs = new GameStatus();
     public int time;
+    public Button restartButton;
     String TAG = "debug";
 
     @Override
@@ -51,6 +53,7 @@ public class GameActivity extends Activity {
                 .findFragmentById(R.id.fragment_game_controls);
         scoreView = (TextView) findViewById(R.id.score);
         timeView = (TextView) findViewById(R.id.timer);
+        restartButton = (Button) findViewById(R.id.button_restart);
         tooggleB = (ToggleButton) findViewById(R.id.toggleButton);
         tooggleB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +79,7 @@ public class GameActivity extends Activity {
             }
 
         }else {
-            Log.d("wordGame", "restore = " + restore);
+            //Log.d("wordGame", "restore = " + restore);
             countDown(20000);
         }
 
@@ -153,9 +156,17 @@ public class GameActivity extends Activity {
             public void onFinish() {
                 timeView.setText("Stage 2");
                 if (GameStatus.getStage() == 1) {
+                    GameStatus.setStage(2);
+                    mGameFragment.startGamestage2();
                     countDown(10000);
                 } else {
                     timeView.setText("End");
+                    mGameFragment.getView().setVisibility(View.GONE);
+                    timeView.setVisibility(View.GONE);
+                    tooggleB.setVisibility(View.GONE);
+                    restartButton.setVisibility(View.GONE);
+
+
                 }
             }
         }.start();

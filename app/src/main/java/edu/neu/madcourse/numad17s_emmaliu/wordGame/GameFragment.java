@@ -173,6 +173,7 @@ public class GameFragment extends Fragment {
 
     private void initViews(View rootView) {
         Log.e(debugTAG, "I am inside initViews");
+        GameStatus.setStage(1);
 
         mEntireBoard.setView(rootView);
 
@@ -180,10 +181,6 @@ public class GameFragment extends Fragment {
         for (int large = 0; large < 9; large++) {
             View outer = rootView.findViewById(mLargeIds[large]);
             mLargeTiles[large].setView(outer);
-
-            if (stage == 2) {
-                startGamestage2();
-            }
 
             for (int small = 0; small < 9; small++) {
                 ImageButton inner = (ImageButton) outer.findViewById
@@ -206,7 +203,9 @@ public class GameFragment extends Fragment {
                     public void onClick(View view) {
                         // ...
                         int isSelect = smallTile.getIsSelected();
-                        if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelect == 0) ) {
+                        String ownerName = smallTile.getOwner().name();
+                        if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelect == 0) &&
+                                !(ownerName.equals("NEITHER"))) {
                             smallTile.animate();
                             smallTile.selectLetter();
                             mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
@@ -220,10 +219,10 @@ public class GameFragment extends Fragment {
                             String inputWord = sbArr[fLarge].toString();
                             userInputTiles[fLarge][fSmall] = smallTile;
 
+
                             // verify word
                             //Log.e(errorTAG, inputWord);
                             if (searchWord(inputWord)) {
-
                                 for (Tile tile : userInputTiles[fLarge]) {
                                     if (tile != null) {
                                         tile.changeBackground();
@@ -252,26 +251,34 @@ public class GameFragment extends Fragment {
         }
     }
 
+    
+
 
     public void startGamestage2() {
-        removeUnConfirmedWords();
         GameStatus.setStage(2);
-
-
+        //removeUnConfirmedWords();
+        removeBackgroundColorForStage2();
+        updateAllTiles();
+        initStringBuilder();
+        initUserInputTiles();
+        initialStatus();
     }
 
-    public void removeUnConfirmedWords () {
-        for (int i = 0; i < 9; i++) {
+    public void removeBackgroundColorForStage2() {
+        for (int i = 0; i < 9; i++){
             for (int j = 0; j < 9; j++) {
-                if (mSmallTiles[i][j].getBackGroundColor() != 1) {
-                    mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
-                } else {
+                if (mSmallTiles[i][j].getBackGroundColor() == 1) {
                     mSmallTiles[i][j].removeBackgroud();
+                    mSmallTiles[i][j].setBackGroundColor(0) ;
                     mSmallTiles[i][j].unSelectLetter();
+                    System.out.println(mSmallTiles[i][j].getOwner() + "  owner");
+                } else {
+                    mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
                 }
             }
         }
     }
+
 
     public void restartGame() {
         mSoundPool.play(mSoundRewind, mVolume, mVolume, 1, 0, 1f);
