@@ -1,9 +1,5 @@
 package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
-import android.text.TextUtils;
-import android.util.ArraySet;
-import android.util.StringBuilderPrinter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,7 +46,6 @@ public class CalculatePath {
             int number = pickNumber();
             result.add(paths.get(number));
         }
-        System.out.println(result);
         return result;
     }
 
@@ -63,12 +58,9 @@ public class CalculatePath {
     public static void generatePathHelper(Map<Integer, ArrayList<Integer>> map, Set<Integer> set,
                                           int pos, ArrayList<String> paths,
                                           ArrayList<Integer> path) {
-
-
         if (path.size() == 9) {
             StringBuilder sb = new StringBuilder();
             for (int i : path) {
-                //System.out.println(set.toString());
                 sb.append(i);
             }
             String s = sb.toString();
@@ -77,7 +69,6 @@ public class CalculatePath {
         }
 
         ArrayList<Integer> neighbors = map.get(pos);
-        //System.out.println("I am here " + neighbors.toString());
         for (int neighbor : neighbors) {
             if (!set.contains(neighbor)) {
                 path.add(neighbor);
@@ -87,7 +78,6 @@ public class CalculatePath {
                 set.remove(neighbor);
             }
         }
-
     }
     public static void main(String[] args) {
         generatePath();

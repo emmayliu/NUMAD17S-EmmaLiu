@@ -38,8 +38,6 @@ public class ControlFragment extends Fragment {
             ((GameActivity) getActivity()).restartGame();
          }
       });
-
-
       return rootView;
    }
 

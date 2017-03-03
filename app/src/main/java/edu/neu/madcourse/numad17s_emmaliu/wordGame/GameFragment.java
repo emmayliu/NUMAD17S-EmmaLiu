@@ -88,9 +88,81 @@ public class GameFragment extends Fragment {
         mSoundRewind = mSoundPool.load(getActivity(), R.raw.joanne_rewind, 1);
 
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView =
+                inflater.inflate(R.layout.large_board, container, false);
+        initViews(rootView);
+        updateAllTiles();
+
+        return rootView;
+    }
+
+    private void initViews(View rootView) {
+        //Log.e(debugTAG, "I am inside initViews");
+        GameStatus.setStage(1);
+
+        mEntireBoard.setView(rootView);
+        for (int large = 0; large < 9; large++) {
+            View outer = rootView.findViewById(mLargeIds[large]);
+            mLargeTiles[large].setView(outer);
+
+            for (int small = 0; small < 9; small++) {
+                ImageButton inner = (ImageButton) outer.findViewById
+                        (mSmallIds[small]);
+                final int fLarge = large;
+                final int fSmall = small;
+
+                final Tile smallTile = mSmallTiles[large][small];
+                smallTile.setView(inner);
+                int bc = smallTile.getBackGroundColor();
+                //Log.e(TAG, Integer.toString(bc));
+                if (bc == 1) {
+                    smallTile.changeBackground();
+                }
+
+                // ...
+                inner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // ...
+                        String s = Integer.toString(GameStatus.getStage());
+                        Log.e(TAG, s);
+
+                        int phase = GameStatus.getStage();
+                        if (phase == 1) {
+                            playGamePhaseOne(fLarge, fSmall, smallTile, phase);
+                        } else if (GameStatus.getStage() == 2){
+                            Log.e(TAG, " stage two code");
+                            playGamePhaseTwo(fLarge, fSmall, smallTile, phase);
+                        }
+                    }
+                });
+                // ...
+            }
+        }
+    }
     private void initStringBuilder () {
         for (int i = 0;  i < 9; i++) {
             sbArr[i] = new StringBuilder("");
+        }
+    }
+    private void initialStatus() {
+        for (int i = 0; i < status.length; i++) {
+            status[i] = -1;
+        }
+    }
+
+    private void initUserInputTiles() {
+        for (int i = 0; i < userInputTiles.length; i++) {
+            for (int j = 0; j < userInputTiles[i].length; j++) {
+                if(userInputTiles[i][j] != null) {
+                    userInputTiles[i][j].removeBackgroud();
+                }
+                userInputTiles[i][j] = null;
+            }
         }
     }
 
@@ -141,82 +213,22 @@ public class GameFragment extends Fragment {
         return false;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView =
-                inflater.inflate(R.layout.large_board, container, false);
-        initViews(rootView);
-        updateAllTiles();
-
-        return rootView;
-    }
-
-    private void initialStatus() {
-        for (int i = 0; i < status.length; i++) {
-            status[i] = -1;
-        }
-    }
-
-    private void initUserInputTiles() {
-        for (int i = 0; i < userInputTiles.length; i++) {
-            for (int j = 0; j < userInputTiles[i].length; j++) {
-                if(userInputTiles[i][j] != null) {
-                    userInputTiles[i][j].removeBackgroud();
-                }
-                userInputTiles[i][j] = null;
-            }
-        }
-    }
-
-
-    private void initViews(View rootView) {
-        Log.e(debugTAG, "I am inside initViews");
-        GameStatus.setStage(1);
-
-        mEntireBoard.setView(rootView);
-        for (int large = 0; large < 9; large++) {
-            View outer = rootView.findViewById(mLargeIds[large]);
-            mLargeTiles[large].setView(outer);
-
-            for (int small = 0; small < 9; small++) {
-                ImageButton inner = (ImageButton) outer.findViewById
-                        (mSmallIds[small]);
-                final int fLarge = large;
-                final int fSmall = small;
-
-                final Tile smallTile = mSmallTiles[large][small];
-                smallTile.setView(inner);
-                int bc = smallTile.getBackGroundColor();
-                //Log.e(TAG, Integer.toString(bc));
-                if (bc == 1) {
-                    smallTile.changeBackground();
-                }
-
-                // ...
-                inner.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // ...
-                        String s = Integer.toString(GameStatus.getStage());
-                        Log.e(TAG, s);
-
-                        int phase = GameStatus.getStage();
-                        if (phase == 1) {
-                            playGamePhaseOne(fLarge, fSmall, smallTile, phase);
-                        } else if (GameStatus.getStage() == 2){
-                            Log.e(TAG, " stage two code");
-                            playGamePhaseTwo(fLarge, fSmall, smallTile, phase);
-                        }
-                    }
-                });
-                // ...
-            }
-        }
-    }
-
     public void playGamePhaseOne(int fLarge, int fSmall, Tile smallTile, int stage) {
         int isSelected = smallTile.getIsSelected();
+        //penalize for invalid move
+        if (!isValidMove(mLastLarge, fLarge, fSmall, stage)) {
+            int myScore = GameStatus.getScore();
+            myScore -= 20;
+            if (myScore < 0) {
+                myScore = 0;
+            }
+            GameStatus.setScore(myScore);
+            String value = "Score: " + Integer.toString(myScore);
+            TextView textView = (TextView) getActivity()
+                    .findViewById(R.id.score);
+            textView.setText(value);
+        }
+
         if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelected == 0)) {
             smallTile.animate();
             smallTile.selectLetter();
@@ -266,6 +278,21 @@ public class GameFragment extends Fragment {
         initUserInputTiles();
     }
 
+    public void removeBackgroundColorForStage2() {
+        for (int i = 0; i < 9; i++){
+            for (int j = 0; j < 9; j++) {
+                if (mSmallTiles[i][j].getBackGroundColor() == 1) {
+                    mSmallTiles[i][j].removeBackgroud();
+                    mSmallTiles[i][j].setBackGroundColor(0) ;
+                    mSmallTiles[i][j].unSelectLetter();
+                    mSmallTiles[i][j].setIsSelected(0);
+                } else {
+                    mSmallTiles[i][j].setIsSelected(0);
+                    mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
+                }
+            }
+        }
+    }
 
     public void playGamePhaseTwo(int fLarge, int fSmall, Tile smallTile, int stage) {
         String name = smallTile.getOwner().name();
@@ -285,8 +312,8 @@ public class GameFragment extends Fragment {
             userInputTiles[fLarge][fSmall] = smallTile;
 
             if (searchWord(inputWord)) {
-                Log.e(TAG, " found word in phase 2");
-                Log.e(TAG, inputWord);
+                //Log.e(TAG, " found word in phase 2");
+                //Log.e(TAG, inputWord);
                 int myScore = GameStatus.getScore();
                 myScore += increaseScoreForPhaseTwo(inputWord);
                 GameStatus.setScore(myScore);
@@ -297,10 +324,12 @@ public class GameFragment extends Fragment {
                 userInputTiles[fLarge][fSmall] = smallTile;
                 phase2Words.add(inputWord);
                 GameStatus.addReportWords(inputWord);
-                for (Tile tile : userInputTiles[fLarge]) {
-                    if (tile != null) {
-                        tile.changeBackground();
-                        tile.setBackGroundColor(1);
+                for (int i = 0; i < 9; i++) {
+                    for (int j = 0; j < 9; j++) {
+                        if (userInputTiles[i][j] != null) {
+                            mSmallTiles[i][j].changeBackground();
+                            mSmallTiles[i][j].setBackGroundColor(1);
+                        }
                     }
                 }
             } else {
@@ -318,24 +347,8 @@ public class GameFragment extends Fragment {
                 }
             }
             sb = new StringBuilder();
+            initUserInputTiles();
             Log.e(TAG, "reset all words in phase 2");
-        }
-
-    }
-
-    public void removeBackgroundColorForStage2() {
-        for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 9; j++) {
-                if (mSmallTiles[i][j].getBackGroundColor() == 1) {
-                    mSmallTiles[i][j].removeBackgroud();
-                    mSmallTiles[i][j].setBackGroundColor(0) ;
-                    mSmallTiles[i][j].unSelectLetter();
-                    mSmallTiles[i][j].setIsSelected(0);
-                } else {
-                    mSmallTiles[i][j].setIsSelected(0);
-                    mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
-                }
-            }
         }
     }
 
@@ -356,6 +369,7 @@ public class GameFragment extends Fragment {
 
     public void initGame() {
         Log.e("word game", "init game");
+        //GameStatus.setScore(0);
         addAllNeighbors();
         initialStatus();
         initStringBuilder();
@@ -408,7 +422,7 @@ public class GameFragment extends Fragment {
      */
 
     private int increaseScoreForPhaseTwo(String word) {
-        Log.e(TAG, "increasing score for phase two");
+        //Log.e(TAG, "increasing score for phase two");
         int score = 0;
         CharSequence c = "word";
         char magicLetter = 'y';
@@ -608,8 +622,6 @@ public class GameFragment extends Fragment {
                 builder.append(',');
                 builder.append(mSmallTiles[large][small].getBackGroundColor());
                 builder.append(',');
-
-
             }
         }
         return builder.toString();

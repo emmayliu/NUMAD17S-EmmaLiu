@@ -2,14 +2,9 @@ package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
 import android.media.MediaPlayer;
 import android.content.Context;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import java.util.HashSet;
-
-/**
- * Created by emma on 3/1/17.
- */
 
 public class GameStatus {
     private static int score = 0;
@@ -61,8 +56,6 @@ public class GameStatus {
         return originalWords;
     }
 
-
-
     public static void playMusic (Context context, int music_id) {
         if (isPlaying) {
             if (mediaPlayer != null) {
@@ -73,7 +66,6 @@ public class GameStatus {
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
         }
-
     }
 
     protected long getCurrentPosition() {
@@ -95,13 +87,6 @@ public class GameStatus {
             mediaPlayer.pause();
             length = getCurrentPosition();
         }
-    }
-
-    public void resumeMusic(Context context, int music_id) {
-        Log.e(TAG, "trying to resume music");
-        mediaPlayer.seekTo((int) length);
-        mediaPlayer.start();
-
     }
 
     public static void startPlaying() {
