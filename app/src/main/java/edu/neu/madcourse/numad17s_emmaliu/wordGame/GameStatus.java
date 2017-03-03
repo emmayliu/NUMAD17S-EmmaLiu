@@ -63,7 +63,7 @@ public class GameStatus {
 
 
 
-    public void playMusic (Context context, int music_id) {
+    public static void playMusic (Context context, int music_id) {
         if (isPlaying) {
             if (mediaPlayer != null) {
                 mediaPlayer.release();
@@ -84,7 +84,7 @@ public class GameStatus {
         }
     }
 
-    public void stopMusic() {
+    public static void stopMusic() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
@@ -104,11 +104,8 @@ public class GameStatus {
 
     }
 
-    public void startPlaying() {
+    public static void startPlaying() {
         isPlaying = true;
     }
 
-    public static void muteMusic() {
-        isPlaying = false;
-    }
 }

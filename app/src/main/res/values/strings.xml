@@ -62,6 +62,12 @@ A tie happens when there are no further moves.
 In the case of a tie in a small board, that will count as a win for
 both sides in the larger game.
 </string>
+    <string name="acknowledge_text">
+        \
+Finally, I made it! \n\
+Professor, thank you for your help with this assignment! \n\
+Discussed assignment requirement with Yudong Wang, Enting Wu, Xueyi Gu.
+    </string>
 
 
 </resources>

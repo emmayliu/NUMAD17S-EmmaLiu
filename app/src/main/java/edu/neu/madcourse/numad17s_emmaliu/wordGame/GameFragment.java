@@ -306,7 +306,6 @@ public class GameFragment extends Fragment {
             } else {
                 Log.e(TAG, "not word in stage2");
                 Log.e(TAG, inputWord);
-
             }
             // if user selected used word, restart phase 2 board
         } else if (isSelected == 1) {
