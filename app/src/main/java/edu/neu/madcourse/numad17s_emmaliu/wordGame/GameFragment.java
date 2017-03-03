@@ -206,7 +206,7 @@ public class GameFragment extends Fragment {
                             playGamePhaseOne(fLarge, fSmall, smallTile, phase);
                         } else if (GameStatus.getStage() == 2){
                             Log.e(TAG, " stage two code");
-                            playGamePhase2(fLarge, fSmall, smallTile, phase);
+                            playGamePhaseTwo(fLarge, fSmall, smallTile, phase);
                         }
                     }
                 });
@@ -243,13 +243,15 @@ public class GameFragment extends Fragment {
                     }
                 }
                 int myScore = GameStatus.getScore();
-                phase1Words.add(inputWord);
                 myScore += increaseScore(inputWord);
                 GameStatus.setScore(myScore);
                 String value = "Score: " + Integer.toString(myScore);
                 TextView textView = (TextView) getActivity()
                         .findViewById(R.id.score);
                 textView.setText(value);
+                phase1Words.add(inputWord);
+                GameStatus.addReportWords(inputWord);
+
             } else {
                 Log.v(debugTAG, "not a word");
             }
@@ -262,12 +264,10 @@ public class GameFragment extends Fragment {
         removeBackgroundColorForStage2();
         updateAllTiles();
         initUserInputTiles();
-
-        System.out.println("current score is start phase2 " + GameStatus.getScore());
     }
 
 
-    public void playGamePhase2(int fLarge, int fSmall, Tile smallTile, int stage) {
+    public void playGamePhaseTwo(int fLarge, int fSmall, Tile smallTile, int stage) {
         String name = smallTile.getOwner().name();
         int isSelected = smallTile.getIsSelected();
         if (isValidMove(mLastLarge, fLarge, fSmall, stage)&& (isSelected == 0) &&
@@ -288,18 +288,15 @@ public class GameFragment extends Fragment {
                 Log.e(TAG, " found word in phase 2");
                 Log.e(TAG, inputWord);
                 int myScore = GameStatus.getScore();
-                System.out.println(stage + "  stage before increase score" + myScore);
                 myScore += increaseScoreForPhaseTwo(inputWord);
                 GameStatus.setScore(myScore);
-                System.out.println("current score in phase2 after " + GameStatus.getScore());
-
                 String value = "Score: " + Integer.toString(myScore);
-                System.out.println(value + "  this is show score");
                 TextView textView = (TextView) getActivity()
                         .findViewById(R.id.score);
                 textView.setText(value);
                 userInputTiles[fLarge][fSmall] = smallTile;
                 phase2Words.add(inputWord);
+                GameStatus.addReportWords(inputWord);
                 for (Tile tile : userInputTiles[fLarge]) {
                     if (tile != null) {
                         tile.changeBackground();
@@ -540,6 +537,8 @@ public class GameFragment extends Fragment {
             word = wordlist.get(random);
             words[i] = word.toUpperCase();
         }
+
+        GameStatus.setOriginalWords(words);
 
         CalculatePath cp = new CalculatePath();
         ArrayList<String> path = cp.generatePath();

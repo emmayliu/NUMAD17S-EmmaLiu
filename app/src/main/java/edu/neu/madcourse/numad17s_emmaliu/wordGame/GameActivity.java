@@ -23,6 +23,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.content.Context;
+import java.util.HashSet;
 
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
@@ -158,14 +160,48 @@ public class GameActivity extends Activity {
                 if (GameStatus.getStage() == 1) {
                     GameStatus.setStage(2);
                     mGameFragment.startGamestage2();
-                    countDown(300000);
+                    countDown(3000);
                 } else {
                     timeView.setText("End");
                     mGameFragment.getView().setVisibility(View.GONE);
                     timeView.setVisibility(View.GONE);
                     tooggleB.setVisibility(View.GONE);
                     restartButton.setVisibility(View.GONE);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(GameActivity.this);
+                    alertDialogBuilder.setTitle("Game Result Report");
+                    alertDialogBuilder.setMessage(generateReport());
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
+            }
+
+            private String generateReport() {
+                String s = "Excellent, You did a great job!";
+                String[] words = GameStatus.getOriginalWords();
+                String s1 = convertToString(words);
+                HashSet<String> userWords = GameStatus.getReprotWords();
+                String[] userWordArr  = userWords.toArray(new String[userWords.size()]);
+                String s2 = convertToString(userWordArr);
+                int score = GameStatus.getScore();
+                String s3 = "Score: " + Integer.toString(score);
+                String s4 = "Enjoy!";
+
+                String message = s + "\n" + "\n" + "Original Words: " + s1 + "\n" +"\n"
+                        + "Words you found:  \n" + s2 + "\n" + "\n" + s3 + "\n" + "\n" + s4;
+                return message;
+            }
+
+            private  String convertToString(String[] arr) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < arr.length; i++) {
+                    String s = arr[i].toLowerCase();
+                    sb.append(s);
+                    if (i != arr.length - 1) {
+                        sb.append(",");
+                    }
+                }
+                return sb.toString();
             }
         }.start();
 

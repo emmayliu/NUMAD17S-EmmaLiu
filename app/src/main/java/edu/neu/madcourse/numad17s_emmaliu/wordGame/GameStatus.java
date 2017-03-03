@@ -5,6 +5,8 @@ import android.content.Context;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.util.HashSet;
+
 /**
  * Created by emma on 3/1/17.
  */
@@ -16,7 +18,9 @@ public class GameStatus {
     public static boolean isPlaying;
     public static int gameStage = 1;
     private static long length;
-    private String TAG = "debuging ";
+    private static HashSet<String> reportWords = new HashSet<>();
+    private static String[] originalWords = new String[9];
+    private static String TAG = "debuging ";
 
 
     public static void setScore (int updateScore) {
@@ -39,6 +43,22 @@ public class GameStatus {
     }
     public static int getStage() {
         return gameStage;
+    }
+
+    public static void addReportWords(String word) {
+        reportWords.add(word);
+    }
+    public static HashSet getReprotWords() {
+        return reportWords;
+    }
+    public static void setOriginalWords(String[] words) {
+        originalWords = words;
+        Log.e(TAG, " setting words");
+        Log.e(TAG, originalWords[0]);
+    }
+
+    public static String[] getOriginalWords() {
+        return originalWords;
     }
 
 
