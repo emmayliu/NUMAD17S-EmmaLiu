@@ -65,7 +65,9 @@ public class GameFragment extends Fragment {
     private static String fileName = "";
     private Tile[][] userInputTiles = new Tile[9][9];
     private MediaPlayer mediaPlayer;
-
+    private StringBuilder sb = new StringBuilder();
+    private HashSet<String> phase1Words = new HashSet<>();
+    private HashSet<String> phase2Words = new HashSet<>();
 
     private String errorTAG = "Error Log";
     private String debugTAG = "Debug ";
@@ -118,26 +120,23 @@ public class GameFragment extends Fragment {
         map.put(8, new ArrayList<>(Arrays.asList(4, 5, 7)));
     }
 
-    private boolean isValidMove(int mLastLarge, int large, int small, int GameStage) {
+    private boolean isValidMove(int mLastLarge, int large, int small, int gameStage) {
         int lasPos = status[large];
-
-        if (mLastLarge == -1) return true;
-        if (lasPos == -1) return true;
-        if (lasPos == small) return false;
-        if (GameStage == 1) {
+        if (gameStage == 1) {
+            if (mLastLarge == -1) return true;
+            if (lasPos == small) return false;
+            if (lasPos == -1) return true;
             ArrayList<Integer> neighbors = map.get(lasPos);
             for (int neighbor : neighbors) {
                 if (neighbor == small) {
                     return true;
                 }
             }
-        } else if (GameStage == 2) {
+        } else if (gameStage == 2) {
             if(mSmallTiles[large][small].getOwner().name() == "NEIGHTER") {
                 return false;
             }
-            if (lasPos == small) {
-                return false;
-            }
+            return true;
         }
         return false;
     }
@@ -176,8 +175,6 @@ public class GameFragment extends Fragment {
         GameStatus.setStage(1);
 
         mEntireBoard.setView(rootView);
-
-        final int stage = GameStatus.getStage();
         for (int large = 0; large < 9; large++) {
             View outer = rootView.findViewById(mLargeIds[large]);
             mLargeTiles[large].setView(outer);
@@ -196,7 +193,6 @@ public class GameFragment extends Fragment {
                     smallTile.changeBackground();
                 }
 
-
                 // ...
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -205,13 +201,13 @@ public class GameFragment extends Fragment {
                         String s = Integer.toString(GameStatus.getStage());
                         Log.e(TAG, s);
 
-                        if (GameStatus.getStage() == 1) {
-                            playGamePhase1(fLarge, fSmall, smallTile, stage);
+                        int phase = GameStatus.getStage();
+                        if (phase == 1) {
+                            playGamePhaseOne(fLarge, fSmall, smallTile, phase);
                         } else if (GameStatus.getStage() == 2){
                             Log.e(TAG, " stage two code");
+                            playGamePhase2(fLarge, fSmall, smallTile, phase);
                         }
-
-
                     }
                 });
                 // ...
@@ -219,16 +215,12 @@ public class GameFragment extends Fragment {
         }
     }
 
-    public void playGamePhase1(int fLarge, int fSmall, Tile smallTile, int stage) {
-        String name = smallTile.getOwner().name();
-        int isSelect = smallTile.getIsSelected();
-        if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelect == 0) &&
-                !(name.equals("NEITHER"))) {
+    public void playGamePhaseOne(int fLarge, int fSmall, Tile smallTile, int stage) {
+        int isSelected = smallTile.getIsSelected();
+        if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelected == 0)) {
             smallTile.animate();
             smallTile.selectLetter();
             mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
-
-
 
             //makeMove(fLarge, fSmall);
             mLastLarge = fLarge;
@@ -251,8 +243,8 @@ public class GameFragment extends Fragment {
                     }
                 }
                 int myScore = GameStatus.getScore();
-
-                myScore += increaseScore(inputWord, 1);
+                phase1Words.add(inputWord);
+                myScore += increaseScore(inputWord);
                 GameStatus.setScore(myScore);
                 String value = "Score: " + Integer.toString(myScore);
                 TextView textView = (TextView) getActivity()
@@ -261,9 +253,6 @@ public class GameFragment extends Fragment {
             } else {
                 Log.v(debugTAG, "not a word");
             }
-        } else {
-            mSoundPool.play(mSoundMiss, mVolume, mVolume, 1, 0, 1f);
-            Log.e(debugTAG, "is selcted");
         }
     }
 
@@ -272,9 +261,70 @@ public class GameFragment extends Fragment {
         //removeUnConfirmedWords();
         removeBackgroundColorForStage2();
         updateAllTiles();
-        initStringBuilder();
         initUserInputTiles();
-        initialStatus();
+
+        System.out.println("current score is start phase2 " + GameStatus.getScore());
+    }
+
+
+    public void playGamePhase2(int fLarge, int fSmall, Tile smallTile, int stage) {
+        String name = smallTile.getOwner().name();
+        int isSelected = smallTile.getIsSelected();
+        if (isValidMove(mLastLarge, fLarge, fSmall, stage)&& (isSelected == 0) &&
+                !(name.equals("NEITHER"))) {
+            smallTile.animate();
+            smallTile.selectLetter();
+            mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
+
+            mLastLarge = fLarge;
+            mLastSmall = fSmall;
+
+            char c = smallTile.getLetter();
+            sb.append(c);
+            String inputWord = sb.toString();
+            userInputTiles[fLarge][fSmall] = smallTile;
+
+            if (searchWord(inputWord)) {
+                Log.e(TAG, " found word in phase 2");
+                Log.e(TAG, inputWord);
+                int myScore = GameStatus.getScore();
+                System.out.println(stage + "  stage before increase score" + myScore);
+                myScore += increaseScoreForPhaseTwo(inputWord);
+                GameStatus.setScore(myScore);
+                System.out.println("current score in phase2 after " + GameStatus.getScore());
+
+                String value = "Score: " + Integer.toString(myScore);
+                System.out.println(value + "  this is show score");
+                TextView textView = (TextView) getActivity()
+                        .findViewById(R.id.score);
+                textView.setText(value);
+                userInputTiles[fLarge][fSmall] = smallTile;
+                phase2Words.add(inputWord);
+                for (Tile tile : userInputTiles[fLarge]) {
+                    if (tile != null) {
+                        tile.changeBackground();
+                        tile.setBackGroundColor(1);
+                    }
+                }
+            } else {
+                Log.e(TAG, "not word in stage2");
+                Log.e(TAG, inputWord);
+
+            }
+            // if user selected used word, restart phase 2 board
+        } else if (isSelected == 1) {
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    if (mSmallTiles[i][j].getIsSelected() == 1) {
+                        mSmallTiles[i][j].unSelectLetter();
+                        mSmallTiles[i][j].updateDrawableState();
+                    }
+                }
+            }
+            sb = new StringBuilder();
+            Log.e(TAG, "reset all words in phase 2");
+        }
+
     }
 
     public void removeBackgroundColorForStage2() {
@@ -284,14 +334,14 @@ public class GameFragment extends Fragment {
                     mSmallTiles[i][j].removeBackgroud();
                     mSmallTiles[i][j].setBackGroundColor(0) ;
                     mSmallTiles[i][j].unSelectLetter();
-                    System.out.println(mSmallTiles[i][j].getOwner() + "  owner");
+                    mSmallTiles[i][j].setIsSelected(0);
                 } else {
+                    mSmallTiles[i][j].setIsSelected(0);
                     mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
                 }
             }
         }
     }
-
 
     public void restartGame() {
         mSoundPool.play(mSoundRewind, mVolume, mVolume, 1, 0, 1f);
@@ -360,32 +410,52 @@ public class GameFragment extends Fragment {
     /**
      * we can design a lot of rules here to make the game addictive
      */
-    private int increaseScore(String word, int stage) {
+
+    private int increaseScoreForPhaseTwo(String word) {
+        Log.e(TAG, "increasing score for phase two");
         int score = 0;
         CharSequence c = "word";
-        if (stage == 1) {
-            char magicLetter = 'y';
-            if (word.length() == 9) {
-                score += 100;
-            } else if (word.contains(c)) {
-                score += 200;
-            }else if (word.indexOf(magicLetter) != -1){
-                score += 100;
-            }  else if (word.length() >= 6) {
-                score += 60;
-            } else if (word.length() >= 4)  {
-                score += 40;
-            } else {
-                score += 20;
-            }
+        char magicLetter = 'y';
+
+        if (phase2Words.contains(word)) {
+            Log.e(TAG, "Alredy have this word in phase 2");
+            return score;
+        }
+
+        if (word.contains(c)) {
+            score += 500;
+        }
+        if (word.indexOf(magicLetter) != -1) {
+            score =+ 100;
+        }
+
+        if (word.length() == 9) {
+            score += 1000;
+        }
+        score += 200;
+        return score;
+    }
+
+    private int increaseScore(String word) {
+        int score = 0;
+        CharSequence c = "word";
+        char magicLetter = 'y';
+
+        // score booster
+        if (word.contains(c)) {
+            score += 500;
+        }
+        if (word.indexOf(magicLetter) != -1) {
+            score =+ 100;
+        }
+        if (word.length() == 9) {
+            score += 100;
+        } else if (word.length() >= 6) {
+            score += 60;
+        } else if (word.length() >= 4)  {
+            score += 40;
         } else {
-            if (word.length() == 9) {
-                score += 500;
-            } else if (word.length() >= 6) {
-                score += 200;
-            } else {
-                score += 100;
-            }
+            score += 20;
         }
         return score;
     }
@@ -438,7 +508,6 @@ public class GameFragment extends Fragment {
                 if (line.length() <= 9) {
                     trie.insert(line.split("\n")[0]);
                 }
-
             }
             Log.e(TAG, " wordGame trie build complete");
 
@@ -566,7 +635,6 @@ public class GameFragment extends Fragment {
                 String color = fields[index++];
                 int c = Integer.valueOf(color);
                 mSmallTiles[large][small].setBackGroundColor(c);
-
             }
         }
         setAvailableFromLastMove(mLastSmall);

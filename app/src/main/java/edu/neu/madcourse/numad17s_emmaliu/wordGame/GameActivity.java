@@ -158,15 +158,13 @@ public class GameActivity extends Activity {
                 if (GameStatus.getStage() == 1) {
                     GameStatus.setStage(2);
                     mGameFragment.startGamestage2();
-                    countDown(10000);
+                    countDown(300000);
                 } else {
                     timeView.setText("End");
                     mGameFragment.getView().setVisibility(View.GONE);
                     timeView.setVisibility(View.GONE);
                     tooggleB.setVisibility(View.GONE);
                     restartButton.setVisibility(View.GONE);
-
-
                 }
             }
         }.start();
