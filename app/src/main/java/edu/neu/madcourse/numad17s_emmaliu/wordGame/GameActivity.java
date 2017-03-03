@@ -75,7 +75,6 @@ public class GameActivity extends Activity {
                 timeView.setText(time);
                 countDown(timeLeft);
             }
-
         }else {
             //Log.d("wordGame", "restore = " + restore);
             GameStatus.setScore(0);
