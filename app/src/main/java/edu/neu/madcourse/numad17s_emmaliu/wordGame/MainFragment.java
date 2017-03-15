@@ -24,6 +24,7 @@ import edu.neu.madcourse.numad17s_emmaliu.R;
 public class MainFragment extends Fragment {
 
     private AlertDialog mDialog;
+    private View continueButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +33,7 @@ public class MainFragment extends Fragment {
                 inflater.inflate(R.layout.fragment_main, container, false);
         // Handle buttons here...
         View newButton = rootView.findViewById(R.id.new_button);
-        View continueButton = rootView.findViewById(R.id.continue_button);
+        continueButton = rootView.findViewById(R.id.continue_button);
         View aboutButton = rootView.findViewById(R.id.about_button);
         View acknowledgeButton = rootView.findViewById(R.id.acknowledge1);
         Switch mySwitch = (Switch) rootView.findViewById(R.id.switch1);
@@ -49,14 +50,15 @@ public class MainFragment extends Fragment {
             }
         });
 
-
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GameStatus.setRestoreStatus(true);
                 Intent intent = new Intent(getActivity(), GameActivity.class);
                 getActivity().startActivity(intent);
             }
         });
+
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,6 +111,16 @@ public class MainFragment extends Fragment {
         // Get rid of the about dialog if it's still up
         if (mDialog != null)
             mDialog.dismiss();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!GameStatus.getRestroeStatus()) {
+            continueButton.setVisibility(View.GONE);
+        } else {
+            continueButton.setVisibility(View.VISIBLE);
+        }
     }
 }
 

@@ -15,8 +15,20 @@ public class GameStatus {
     private static long length;
     private static HashSet<String> reportWords = new HashSet<>();
     private static String[] originalWords = new String[9];
+    private static boolean hasRestore;
     private static String TAG = "debuging ";
 
+
+    public static void setRestoreStatus (boolean restore) {
+        System.out.println(" before restore" + hasRestore);
+        hasRestore = restore;
+        System.out.println(" after restore" + hasRestore);
+    }
+
+    public static boolean getRestroeStatus () {
+        System.out.println(" restore " + hasRestore);
+        return hasRestore;
+    }
 
     public static void setScore (int updateScore) {
         score = updateScore;

@@ -1,11 +1,3 @@
-/***
- * Excerpted from "Hello, Android",
- * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material,
- * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose.
- * Visit http://www.pragmaticprogrammer.com/titles/eband4 for more book information.
- ***/
 package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
 import android.app.Activity;
@@ -163,7 +155,6 @@ public class GameActivity extends Activity {
                     restartButton.setVisibility(View.GONE);
                     homeButton.setVisibility(View.GONE);
                     toggleB.setVisibility(View.GONE);
-
                     countDown(30000);
                 } else {
                     mGameFragment.getView().setVisibility(View.GONE);
@@ -177,6 +168,7 @@ public class GameActivity extends Activity {
                     alertDialogBuilder.setMessage(generateReport());
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
+                    GameStatus.setRestoreStatus(false);
 
                     homeButton.setVisibility(View.VISIBLE);
                 }
@@ -197,6 +189,8 @@ public class GameActivity extends Activity {
                         + getResources().getString(R.string.userWords) + "\n" + s2 + "\n" + "\n"
                         + s3 + "\n" + "\n"
                         + getResources().getString(R.string.enjoyText);
+
+
                 return message;
             }
 
