@@ -432,6 +432,11 @@ public class GameFragment extends Fragment {
             return score;
         }
 
+        if (phase1Words.contains(word)) {
+            Log.d(TAG, "Alreday have this word in phase 1");
+            return score;
+        }
+
         if (word.contains(c)) {
             score += 500;
         }
