@@ -19,14 +19,13 @@ import edu.neu.madcourse.numad17s_emmaliu.R;
 public class GameActivity extends Activity {
     public static final String KEY_RESTORE = "key_restore";
     public static final String PREF_RESTORE = "pref_restore";
-    private MediaPlayer mMediaPlayer;
     private Handler mHandler = new Handler();
     private GameFragment mGameFragment;
     private ControlFragment controlFragment;
     private CountDownTimer countDownTimer;
     public TextView scoreView;
     public TextView timeView;
-    public ToggleButton toggleB;
+    public ToggleButton pauseButton;
     public GameStatus gs = new GameStatus();
     public int time;
     public Button restartButton;
@@ -45,8 +44,8 @@ public class GameActivity extends Activity {
         timeView = (TextView) findViewById(R.id.timer);
         restartButton = (Button) findViewById(R.id.button_restart);
         homeButton = (Button)findViewById(R.id.button_main);
-        toggleB = (ToggleButton) findViewById(R.id.toggleButton);
-        toggleB.setOnClickListener(new View.OnClickListener() {
+        pauseButton = (ToggleButton) findViewById(R.id.toggleButton);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onToggleClicked(v);
@@ -54,6 +53,8 @@ public class GameActivity extends Activity {
         });
         boolean restore = getIntent().getBooleanExtra(KEY_RESTORE, false);
         int timeLeft = GameStatus.getTimeLeft();
+
+        GameStatus.setStage(1);
 
         if (restore) {
             String gameData = getPreferences(MODE_PRIVATE)
@@ -70,7 +71,7 @@ public class GameActivity extends Activity {
         }else {
             //Log.d("wordGame", "restore = " + restore);
             GameStatus.setScore(0);
-            countDown(60000);
+            countDown(10000);
         }
 
     }
@@ -82,7 +83,7 @@ public class GameActivity extends Activity {
     public void onToggleClicked(View view) {
         boolean on = ((ToggleButton) view).isChecked();
         if (on) {
-            onPause();
+            countDownTimer.cancel();
             mGameFragment.getView().setVisibility(View.GONE);
             controlFragment.getView().setVisibility(View.GONE);
             timeView.setVisibility(View.INVISIBLE);
@@ -96,8 +97,8 @@ public class GameActivity extends Activity {
             timeView.setVisibility(View.VISIBLE);
             scoreView.setVisibility(View.VISIBLE);
             int length =(int) gs.getCurrentPosition();
-            mMediaPlayer.seekTo(length);
-            mMediaPlayer.start();
+            GameStatus.mediaPlayer.seekTo(length);
+            GameStatus.mediaPlayer.start();
 
         }
     }
@@ -105,9 +106,11 @@ public class GameActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMediaPlayer = MediaPlayer.create(this, R.raw.yankee);
-        mMediaPlayer.setLooping(true);
-        mMediaPlayer.start();
+        GameStatus.mediaPlayer = MediaPlayer.create(this, R.raw.yankee);
+        GameStatus.mediaPlayer.setLooping(true);
+        if (GameStatus.isPlaying == true) {
+            GameStatus.mediaPlayer.start();
+        }
 
     }
 
@@ -116,7 +119,7 @@ public class GameActivity extends Activity {
         super.onPause();
         mHandler.removeCallbacks(null);
         String gameData = mGameFragment.getState();
-        mMediaPlayer.pause();
+        GameStatus.mediaPlayer.pause();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
                 .apply();
@@ -152,14 +155,12 @@ public class GameActivity extends Activity {
                 if (GameStatus.getStage() == 1) {
                     GameStatus.setStage(2);
                     mGameFragment.startGamestage2();
-                    restartButton.setVisibility(View.GONE);
                     homeButton.setVisibility(View.GONE);
-                    toggleB.setVisibility(View.GONE);
                     countDown(30000);
                 } else {
                     mGameFragment.getView().setVisibility(View.GONE);
                     timeView.setVisibility(View.GONE);
-                    toggleB.setVisibility(View.GONE);
+                    pauseButton.setVisibility(View.GONE);
                     restartButton.setVisibility(View.GONE);
                     scoreView.setVisibility(View.GONE);
                     AlertDialog.Builder alertDialogBuilder =
@@ -169,7 +170,6 @@ public class GameActivity extends Activity {
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                     GameStatus.setRestoreStatus(false);
-
                     homeButton.setVisibility(View.VISIBLE);
                 }
             }

@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.media.MediaPlayer;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -102,7 +103,6 @@ public class GameFragment extends Fragment {
 
     private void initViews(View rootView) {
         //Log.e(debugTAG, "I am inside initViews");
-        GameStatus.setStage(1);
 
         mEntireBoard.setView(rootView);
         for (int large = 0; large < 9; large++) {
@@ -270,9 +270,10 @@ public class GameFragment extends Fragment {
         }
     }
 
+
+
     public void startGamestage2() {
         GameStatus.setStage(2);
-        //removeUnConfirmedWords();
         removeBackgroundColorForStage2();
         updateAllTiles();
         initUserInputTiles();
@@ -288,6 +289,7 @@ public class GameFragment extends Fragment {
                     mSmallTiles[i][j].setIsSelected(0);
                 } else {
                     mSmallTiles[i][j].setIsSelected(0);
+                    mSmallTiles[i][j].setLetter(' ');
                     mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
                 }
             }
@@ -352,7 +354,13 @@ public class GameFragment extends Fragment {
         }
     }
 
+
+
     public void restartGame() {
+        if (GameStatus.getStage() == 2) {
+            Toast.makeText(getActivity(), R.string.restartToast, Toast.LENGTH_SHORT).show();
+            return;
+        }
         mSoundPool.play(mSoundRewind, mVolume, mVolume, 1, 0, 1f);
         // ...
         initialStatus();

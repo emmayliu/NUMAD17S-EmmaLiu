@@ -67,6 +67,7 @@ Discussed assignment requirement with Yudong Wang, Enting Wu, Xueyi Gu.
     </string>
 
     <string name="alertToastText">Hurry up, only 10 seconds left</string>
+    <string name="restartToast">Cannot restart in Phase 2</string>
     <string name="gameReportTitle">Game Report Title</string>
     <string name="congratulation">Excellent! You did a great job!</string>
     <string name="originalWords">Original Words: </string>

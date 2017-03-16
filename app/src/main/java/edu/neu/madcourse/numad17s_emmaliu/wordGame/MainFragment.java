@@ -44,7 +44,9 @@ public class MainFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     GameStatus.stopMusic();
+                    GameStatus.isPlaying = false;
                 } else {
+                    GameStatus.isPlaying = true;
                     GameStatus.playMusic(getActivity(), R.raw.office);
                 }
             }
