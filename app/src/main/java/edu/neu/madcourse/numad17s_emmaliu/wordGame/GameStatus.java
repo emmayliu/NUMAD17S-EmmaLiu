@@ -11,7 +11,7 @@ public class GameStatus {
     private static int timeLeft = 60;
     public static MediaPlayer mediaPlayer;
     public static boolean isPlaying;
-    public static int gameStage = 1;
+    public static int gameStage;
     private static long length;
     private static HashSet<String> reportWords = new HashSet<>();
     private static String[] originalWords = new String[9];
@@ -48,6 +48,7 @@ public class GameStatus {
     public static int getStage() {
         return gameStage;
     }
+
 
     public static void addReportWords(String word) {
         reportWords.add(word);

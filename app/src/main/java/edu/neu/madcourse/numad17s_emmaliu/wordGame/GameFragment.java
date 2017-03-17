@@ -65,10 +65,10 @@ public class GameFragment extends Fragment {
     private boolean[][][] visited = new boolean[26][26][26];
     private static String fileName = "";
     private Tile[][] userInputTiles = new Tile[9][9];
-    private MediaPlayer mediaPlayer;
     private StringBuilder sb = new StringBuilder();
     private HashSet<String> phase1Words = new HashSet<>();
     private HashSet<String> phase2Words = new HashSet<>();
+    private int phase;
 
     private String errorTAG = "Error Log";
     private String debugTAG = "Debug ";
@@ -131,7 +131,7 @@ public class GameFragment extends Fragment {
                         String s = Integer.toString(GameStatus.getStage());
                         Log.e(TAG, s);
 
-                        int phase = GameStatus.getStage();
+                        phase = GameStatus.getStage();
                         if (phase == 1) {
                             playGamePhaseOne(fLarge, fSmall, smallTile, phase);
                         } else if (GameStatus.getStage() == 2){
@@ -166,20 +166,6 @@ public class GameFragment extends Fragment {
         }
     }
 
-    private void clearAvailable() {
-        mAvailable.clear();
-    }
-
-    private void addAvailable(Tile tile) {
-        tile.animate();
-        mAvailable.add(tile);
-    }
-
-    public boolean isAvailable(Tile tile) {
-        return mAvailable.contains(tile);
-    }
-
-    // this is not a good approach, will improve later
     private void addAllNeighbors () {
         map.put(0, new ArrayList<>(Arrays.asList(1, 3, 4)));
         map.put(1, new ArrayList<>(Arrays.asList(0, 2, 3, 4, 5)));
@@ -273,11 +259,16 @@ public class GameFragment extends Fragment {
 
 
     public void startGamestage2() {
+        phase = 2;
         GameStatus.setStage(2);
         removeBackgroundColorForStage2();
         updateAllTiles();
         initUserInputTiles();
+        phase1Words = GameStatus.getReprotWords();
+        System.out.println("When start phase2 " + phase1Words);
+        //phase2Words = GameStatus.getWordsTwo();
     }
+
 
     public void removeBackgroundColorForStage2() {
         for (int i = 0; i < 9; i++){
@@ -288,9 +279,9 @@ public class GameFragment extends Fragment {
                     mSmallTiles[i][j].unSelectLetter();
                     mSmallTiles[i][j].setIsSelected(0);
                 } else {
-                    mSmallTiles[i][j].setIsSelected(0);
-                    mSmallTiles[i][j].setLetter(' ');
                     mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
+                    mSmallTiles[i][j].setLetter(' ');
+                    mSmallTiles[i][j].updateDrawableState();
                 }
             }
         }
@@ -377,7 +368,7 @@ public class GameFragment extends Fragment {
 
     public void initGame() {
         Log.e("word game", "init game");
-        //GameStatus.setScore(0);
+        GameStatus.setStage(1);
         addAllNeighbors();
         initialStatus();
         initStringBuilder();
@@ -398,7 +389,7 @@ public class GameFragment extends Fragment {
         // If the player moves first, set which spots are available
         mLastSmall = -1;
         mLastLarge = -1;
-        setAvailableFromLastMove(mLastSmall);
+        //setAvailableFromLastMove(mLastSmall);
     }
 
     public ArrayList<String> readData(String fileName) throws IOException {
@@ -430,47 +421,32 @@ public class GameFragment extends Fragment {
      */
 
     private int increaseScoreForPhaseTwo(String word) {
-        //Log.e(TAG, "increasing score for phase two");
+        Log.e(TAG, "increasing score for phase two");
+
         int score = 0;
-        CharSequence c = "word";
-        char magicLetter = 'y';
 
-        if (phase2Words.contains(word)) {
-            Log.e(TAG, "Alredy have this word in phase 2");
+        if (phase2Words.contains(word) || phase1Words.contains(word)) {
+            Log.e(TAG, "Alredy have this word in phase 2 or phase1");
+            System.out.println(phase2Words + " phase2 words");
+            System.out.println(phase1Words + " phase1 words");
             return score;
+        } else if (word.length() == 9) {
+            score += 200;
+        } else {
+            Log.e(TAG, "I am here");
+            System.out.println(phase2Words + " phase2 words");
+            System.out.println(phase1Words + " phase1 words");
+            score += 100;
         }
 
-        if (phase1Words.contains(word)) {
-            Log.d(TAG, "Alreday have this word in phase 1");
-            return score;
-        }
-
-        if (word.contains(c)) {
-            score += 500;
-        }
-        if (word.indexOf(magicLetter) != -1) {
-            score =+ 100;
-        }
-
-        if (word.length() == 9) {
-            score += 1000;
-        }
-        score += 200;
         return score;
     }
 
     private int increaseScore(String word) {
-        int score = 0;
-        CharSequence c = "word";
-        char magicLetter = 'y';
+        Log.e(TAG, " now increase score for phase1");
 
-        // score booster
-        if (word.contains(c)) {
-            score += 500;
-        }
-        if (word.indexOf(magicLetter) != -1) {
-            score =+ 100;
-        }
+        int score = 0;
+
         if (word.length() == 9) {
             score += 100;
         } else if (word.length() >= 6) {
@@ -577,32 +553,6 @@ public class GameFragment extends Fragment {
         }
     }
 
-    private void setAvailableFromLastMove(int small) {
-        clearAvailable();
-        // Make all the tiles at the destination available
-        if (small != -1) {
-            for (int dest = 0; dest < 9; dest++) {
-                Tile tile = mSmallTiles[small][dest];
-                if (tile.getOwner() == Tile.Owner.NEITHER)
-                    addAvailable(tile);
-            }
-        }
-        // If there were none available, make all squares available
-        if (mAvailable.isEmpty()) {
-            setAllAvailable();
-        }
-    }
-
-    private void setAllAvailable() {
-        for (int large = 0; large < 9; large++) {
-            for (int small = 0; small < 9; small++) {
-                Tile tile = mSmallTiles[large][small];
-                if (tile.getOwner() == Tile.Owner.NEITHER)
-                    addAvailable(tile);
-            }
-        }
-    }
-
     private void updateAllTiles() {
         mEntireBoard.updateDrawableState();
         for (int large = 0; large < 9; large++) {
@@ -660,7 +610,6 @@ public class GameFragment extends Fragment {
                 mSmallTiles[large][small].setBackGroundColor(c);
             }
         }
-        setAvailableFromLastMove(mLastSmall);
         updateAllTiles();
     }
 }

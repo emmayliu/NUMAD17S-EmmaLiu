@@ -491,7 +491,8 @@ public class Tile {
                 level = LEVEL_TIE;
                 break;
             case NEITHER:
-                level = mGame.isAvailable(this) ? LEVEL_AVAILABLE : LEVEL_BLANK;
+                level = LEVEL_BLANK;
+                //level = mGame.isAvailable(this) ? LEVEL_AVAILABLE : LEVEL_BLANK;
                 break;
         }
         return level;
