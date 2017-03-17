@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 
-import edu.neu.madcourse.numad17s_emmaliu.wordGame.GameStatus;
 import edu.neu.madcourse.numad17s_emmaliu.R;
 
 public class GameFragment extends Fragment {
@@ -191,7 +190,7 @@ public class GameFragment extends Fragment {
                 }
             }
         } else if (gameStage == 2) {
-            if(mSmallTiles[large][small].getOwner().name() == "NEIGHTER") {
+            if(mSmallTiles[large][small].getOwner().name().equals("NEITHER")) {
                 return false;
             }
             return true;
@@ -256,8 +255,6 @@ public class GameFragment extends Fragment {
         }
     }
 
-
-
     public void startGamestage2() {
         phase = 2;
         GameStatus.setStage(2);
@@ -265,10 +262,8 @@ public class GameFragment extends Fragment {
         updateAllTiles();
         initUserInputTiles();
         phase1Words = GameStatus.getReprotWords();
-        System.out.println("When start phase2 " + phase1Words);
-        //phase2Words = GameStatus.getWordsTwo();
-    }
 
+    }
 
     public void removeBackgroundColorForStage2() {
         for (int i = 0; i < 9; i++){
@@ -282,7 +277,9 @@ public class GameFragment extends Fragment {
                     mSmallTiles[i][j].setOwner(Tile.Owner.NEITHER);
                     mSmallTiles[i][j].setLetter(' ');
                     mSmallTiles[i][j].updateDrawableState();
+
                 }
+                mSmallTiles[i][j].getView().setBackgroundColor(View.GONE);
             }
         }
     }
@@ -326,7 +323,6 @@ public class GameFragment extends Fragment {
                     }
                 }
             } else {
-                Log.e(TAG, "not word in stage2");
                 Log.e(TAG, inputWord);
             }
             // if user selected used word, restart phase 2 board
@@ -344,8 +340,6 @@ public class GameFragment extends Fragment {
             Log.e(TAG, "reset all words in phase 2");
         }
     }
-
-
 
     public void restartGame() {
         if (GameStatus.getStage() == 2) {
@@ -427,15 +421,11 @@ public class GameFragment extends Fragment {
 
         if (phase2Words.contains(word) || phase1Words.contains(word)) {
             Log.e(TAG, "Alredy have this word in phase 2 or phase1");
-            System.out.println(phase2Words + " phase2 words");
-            System.out.println(phase1Words + " phase1 words");
             return score;
         } else if (word.length() == 9) {
             score += 200;
         } else {
             Log.e(TAG, "I am here");
-            System.out.println(phase2Words + " phase2 words");
-            System.out.println(phase1Words + " phase1 words");
             score += 100;
         }
 

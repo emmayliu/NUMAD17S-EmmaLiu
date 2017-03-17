@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import java.util.HashSet;
+import android.util.Log;
 
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
@@ -30,8 +31,6 @@ public class GameActivity extends Activity {
     public int time;
     public Button restartButton;
     public Button homeButton;
-    String TAG = "debug";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,6 @@ public class GameActivity extends Activity {
         boolean restore = getIntent().getBooleanExtra(KEY_RESTORE, false);
         int timeLeft = GameStatus.getTimeLeft();
 
-        //GameStatus.setStage(1);
 
         if (restore) {
             String gameData = getPreferences(MODE_PRIVATE)
@@ -109,7 +107,7 @@ public class GameActivity extends Activity {
         super.onResume();
         GameStatus.mediaPlayer = MediaPlayer.create(this, R.raw.yankee);
         GameStatus.mediaPlayer.setLooping(true);
-        System.out.println(" got the game stage" + GameStatus.getStage());
+
         if (GameStatus.isPlaying == true) {
             GameStatus.mediaPlayer.start();
         }
@@ -121,6 +119,7 @@ public class GameActivity extends Activity {
         super.onPause();
         mHandler.removeCallbacks(null);
         String gameData = mGameFragment.getState();
+
         GameStatus.mediaPlayer.pause();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
@@ -157,7 +156,6 @@ public class GameActivity extends Activity {
             @Override
             public void onFinish() {
                 if (GameStatus.getStage() == 1) {
-                    GameStatus.setStage(2);
                     mGameFragment.startGamestage2();
                     homeButton.setVisibility(View.GONE);
                     countDown(30000);
