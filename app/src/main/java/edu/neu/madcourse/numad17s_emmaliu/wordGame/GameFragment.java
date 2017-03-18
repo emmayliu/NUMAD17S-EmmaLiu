@@ -201,7 +201,7 @@ public class GameFragment extends Fragment {
         //penalize for invalid move
         if (!isValidMove(mLastLarge, fLarge, fSmall, GameStatus.isGameStageTwo)) {
             int myScore = GameStatus.getScore();
-            myScore -= 20;
+            myScore -= 5;
             if (myScore < 0) {
                 myScore = 0;
             }

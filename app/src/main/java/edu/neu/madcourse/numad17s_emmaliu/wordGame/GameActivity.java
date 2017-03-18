@@ -70,7 +70,7 @@ public class GameActivity extends Activity {
         }else {
             //Log.d("wordGame", "restore = " + restore);
             GameStatus.setScore(0);
-            countDown(10000);
+            countDown(90000);
         }
 
     }
@@ -157,7 +157,7 @@ public class GameActivity extends Activity {
             public void onFinish() {
                 if (!GameStatus.isGameStageTwo) {
                     mGameFragment.startGamestage2();
-                    countDown(30000);
+                    countDown(60000);
                 } else {
                     mGameFragment.getView().setVisibility(View.GONE);
                     timeView.setVisibility(View.GONE);
