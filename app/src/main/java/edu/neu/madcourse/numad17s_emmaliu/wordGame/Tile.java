@@ -325,6 +325,7 @@ public class Tile {
         getView().setBackgroundColor(BLUE);
     }
     public void removeBackgroud() {
+        this.backGroundColor = 0;
         getView().setBackgroundColor(TRANSPARENT);
     }
 

@@ -11,7 +11,7 @@ public class GameStatus {
     private static int timeLeft = 60;
     public static MediaPlayer mediaPlayer;
     public static boolean isPlaying;
-    public static int gameStage;
+    public static boolean isGameStageTwo;
     private static long length;
     private static HashSet<String> reportWords = new HashSet<>();
     private static String[] originalWords = new String[9];
@@ -42,11 +42,11 @@ public class GameStatus {
         return timeLeft;
     }
 
-    public static void setStage(int stage) {
-        gameStage = stage;
+    public static void setIsGameStageTwo(boolean value) {
+        isGameStageTwo = value;
     }
-    public static int getStage() {
-        return gameStage;
+    public static boolean getIsGameStageTwo() {
+        return isGameStageTwo;
     }
 
 

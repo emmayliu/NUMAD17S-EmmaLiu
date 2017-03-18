@@ -101,7 +101,7 @@ public class GameFragment extends Fragment {
     }
 
     private void initViews(View rootView) {
-        //Log.e(debugTAG, "I am inside initViews");
+        Log.e(debugTAG, "I am here inside initViews");
 
         mEntireBoard.setView(rootView);
         for (int large = 0; large < 9; large++) {
@@ -126,16 +126,14 @@ public class GameFragment extends Fragment {
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // ...
-                        String s = Integer.toString(GameStatus.getStage());
-                        Log.e(TAG, s);
+                        smallTile.animate();
+                        mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
 
-                        phase = GameStatus.getStage();
-                        if (phase == 1) {
-                            playGamePhaseOne(fLarge, fSmall, smallTile, phase);
-                        } else if (GameStatus.getStage() == 2){
-                            Log.e(TAG, " stage two code");
-                            playGamePhaseTwo(fLarge, fSmall, smallTile, phase);
+                        if (!GameStatus.getIsGameStageTwo()) {
+                            playGamePhaseOne(fLarge, fSmall, smallTile);
+                        } else {
+                            Log.e(TAG, " i am here for stage two playing");
+                            playGamePhaseTwo(fLarge, fSmall, smallTile);
                         }
                     }
                 });
@@ -177,9 +175,9 @@ public class GameFragment extends Fragment {
         map.put(8, new ArrayList<>(Arrays.asList(4, 5, 7)));
     }
 
-    private boolean isValidMove(int mLastLarge, int large, int small, int gameStage) {
+    private boolean isValidMove(int mLastLarge, int large, int small, boolean isGameStageTwo) {
         int lasPos = status[large];
-        if (gameStage == 1) {
+        if (!isGameStageTwo) {
             if (mLastLarge == -1) return true;
             if (lasPos == small) return false;
             if (lasPos == -1) return true;
@@ -189,7 +187,7 @@ public class GameFragment extends Fragment {
                     return true;
                 }
             }
-        } else if (gameStage == 2) {
+        } else {
             if(mSmallTiles[large][small].getOwner().name().equals("NEITHER")) {
                 return false;
             }
@@ -198,10 +196,10 @@ public class GameFragment extends Fragment {
         return false;
     }
 
-    public void playGamePhaseOne(int fLarge, int fSmall, Tile smallTile, int stage) {
+    public void playGamePhaseOne(int fLarge, int fSmall, Tile smallTile) {
         int isSelected = smallTile.getIsSelected();
         //penalize for invalid move
-        if (!isValidMove(mLastLarge, fLarge, fSmall, stage)) {
+        if (!isValidMove(mLastLarge, fLarge, fSmall, GameStatus.isGameStageTwo)) {
             int myScore = GameStatus.getScore();
             myScore -= 20;
             if (myScore < 0) {
@@ -214,7 +212,7 @@ public class GameFragment extends Fragment {
             textView.setText(value);
         }
 
-        if (isValidMove(mLastLarge, fLarge, fSmall, stage) && (isSelected == 0)) {
+        if (isValidMove(mLastLarge, fLarge, fSmall, GameStatus.isGameStageTwo) && (isSelected == 0)) {
             smallTile.animate();
             smallTile.selectLetter();
             mSoundPool.play(mSoundX, mVolume, mVolume, 1, 0, 1f);
@@ -257,7 +255,7 @@ public class GameFragment extends Fragment {
 
     public void startGamestage2() {
         phase = 2;
-        GameStatus.setStage(2);
+        GameStatus.setIsGameStageTwo(true);
         removeBackgroundColorForStage2();
         updateAllTiles();
         initUserInputTiles();
@@ -284,10 +282,10 @@ public class GameFragment extends Fragment {
         }
     }
 
-    public void playGamePhaseTwo(int fLarge, int fSmall, Tile smallTile, int stage) {
+    public void playGamePhaseTwo(int fLarge, int fSmall, Tile smallTile) {
         String name = smallTile.getOwner().name();
         int isSelected = smallTile.getIsSelected();
-        if (isValidMove(mLastLarge, fLarge, fSmall, stage)&& (isSelected == 0) &&
+        if (isValidMove(mLastLarge, fLarge, fSmall, GameStatus.isGameStageTwo)&& (isSelected == 0) &&
                 !(name.equals("NEITHER"))) {
             smallTile.animate();
             smallTile.selectLetter();
@@ -342,7 +340,7 @@ public class GameFragment extends Fragment {
     }
 
     public void restartGame() {
-        if (GameStatus.getStage() == 2) {
+        if (GameStatus.isGameStageTwo) {
             Toast.makeText(getActivity(), R.string.restartToast, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -361,8 +359,7 @@ public class GameFragment extends Fragment {
     }
 
     public void initGame() {
-        Log.e("word game", "init game");
-        GameStatus.setStage(1);
+        //GameStatus.setIsGameStageTwo(false);
         addAllNeighbors();
         initialStatus();
         initStringBuilder();
@@ -419,8 +416,8 @@ public class GameFragment extends Fragment {
 
         int score = 0;
 
-        if (phase2Words.contains(word) || phase1Words.contains(word)) {
-            Log.e(TAG, "Alredy have this word in phase 2 or phase1");
+        if (GameStatus.getReprotWords().contains(word)) {
+            Log.e(TAG, "Already have this word in phase 2 or phase1");
             return score;
         } else if (word.length() == 9) {
             score += 200;

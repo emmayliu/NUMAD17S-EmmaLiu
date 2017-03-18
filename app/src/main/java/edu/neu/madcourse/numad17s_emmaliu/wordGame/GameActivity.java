@@ -155,9 +155,8 @@ public class GameActivity extends Activity {
             }
             @Override
             public void onFinish() {
-                if (GameStatus.getStage() == 1) {
+                if (!GameStatus.isGameStageTwo) {
                     mGameFragment.startGamestage2();
-                    homeButton.setVisibility(View.GONE);
                     countDown(30000);
                 } else {
                     mGameFragment.getView().setVisibility(View.GONE);
@@ -173,6 +172,7 @@ public class GameActivity extends Activity {
                     alertDialog.show();
                     GameStatus.setRestoreStatus(false);
                     homeButton.setVisibility(View.VISIBLE);
+                    GameStatus.setIsGameStageTwo(false);
                 }
             }
 
