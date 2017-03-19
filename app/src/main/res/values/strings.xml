@@ -53,6 +53,11 @@
     <string name="about_title">About Scroggle</string>
     <string name="about_label">About</string>
     <string name="ok_label">OK</string>
+    <string name="scoreboard_lable">Scoreboard</string>
+    <string name="highestGameSocre">Final Game Score</string>
+    <string name="highestSingleWord">Highest Word Score</string>
+    <string name="ScoreboardButton">Scoreboard</string>
+    <string name="Leaderboard">Leaderboard</string>
      <string name="about_text">\
 This game has two phases. For phase 1, you need to find words in each 3 x 3 grid. The
          letters of words you found will be used for phase 2\n\
@@ -73,5 +78,6 @@ Discussed assignment requirement with Yudong Wang, Enting Wu, Xueyi Gu.
     <string name="userWords">Words you found: </string>
     <string name="time">Time: </string>
     <string name="enjoyText">Hope you enjoy this game!</string>
+    <string name="usernameHint">Enter username</string>
 
 </resources>

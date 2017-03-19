@@ -17,6 +17,7 @@ public class GameStatus {
     private static String[] originalWords = new String[9];
     private static boolean hasRestore;
     private static String TAG = "debuging ";
+    private static String username;
 
 
     public static void setRestoreStatus (boolean restore) {
@@ -48,6 +49,14 @@ public class GameStatus {
     public static boolean getIsGameStageTwo() {
         return isGameStageTwo;
     }
+
+    public static void setUsername (String name) {
+        username = name;
+    }
+    public static String getUsername() {
+        return username;
+    }
+
 
 
     public static void addReportWords(String word) {

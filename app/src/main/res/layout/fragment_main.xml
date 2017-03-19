@@ -27,6 +27,14 @@
        android:textAlignment="center"
        android:textStyle="normal|bold" />
 
+   <EditText
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:inputType="textPersonName"
+       android:ems="10"
+       android:id="@+id/editTextUsername"
+       android:hint="@string/usernameHint"/>
+
    <Button
       android:id="@+id/continue_button"
       android:layout_width="match_parent"
@@ -53,7 +61,19 @@
       android:padding="@dimen/menu_button_padding"
       android:text="@string/about_label"/>
 
-   <Button
+    <Button
+        android:text="@string/ScoreboardButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonScoreboard" />
+
+    <Button
+        android:text="@string/Leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonLeaderboard" />
+
+    <Button
        android:text="@string/acknowledgementsTitle"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"

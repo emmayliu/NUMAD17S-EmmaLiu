@@ -12,31 +12,75 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
+import android.util.Log;
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
 
 public class MainFragment extends Fragment {
 
     private AlertDialog mDialog;
-    private View continueButton;
+    private View buttonContinue;
+    private Button buttonScoreboard;
+    private Button buttonLeaderboard;
+    String TAG = "TAG for debugging";
+
+    SharedPreferences shared_preferences;
+    SharedPreferences.Editor shared_preferences_editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =
+        final View rootView =
                 inflater.inflate(R.layout.fragment_main, container, false);
         // Handle buttons here...
         View newButton = rootView.findViewById(R.id.new_button);
-        continueButton = rootView.findViewById(R.id.continue_button);
+        buttonContinue = rootView.findViewById(R.id.continue_button);
         View aboutButton = rootView.findViewById(R.id.about_button);
         View acknowledgeButton = rootView.findViewById(R.id.acknowledge1);
         Switch mySwitch = (Switch) rootView.findViewById(R.id.switch1);
+        EditText editTextUsername = (EditText) rootView.findViewById(R.id.editTextUsername);
+        buttonScoreboard = (Button) rootView.findViewById(R.id.buttonScoreboard);
+        buttonLeaderboard = (Button) rootView.findViewById(R.id.buttonLeaderboard);
+
+
+        editTextUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String username = s.toString();
+                Log.d(TAG, username);
+                GameStatus.setUsername(username);
+                shared_preferences = PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
+                shared_preferences_editor = shared_preferences.edit();
+                shared_preferences_editor.putString("username", username);
+                shared_preferences_editor.commit();
+
+                System.out.println("username in shared_preferences in afterTextChanged " +
+                        shared_preferences.getString("username", "DEFAULT"));
+            }
+
+        });
 
         mySwitch.setChecked(false);
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -61,7 +105,7 @@ public class MainFragment extends Fragment {
             }
         });
 
-        continueButton.setOnClickListener(new View.OnClickListener() {
+        buttonContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), GameActivity.class);
@@ -102,6 +146,21 @@ public class MainFragment extends Fragment {
             }
         });
 
+        buttonScoreboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ScoreboardActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
+        buttonLeaderboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ScoreboardActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         return rootView;
     }
@@ -119,9 +178,9 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (!GameStatus.getRestroeStatus()) {
-            continueButton.setVisibility(View.GONE);
+            buttonContinue.setVisibility(View.GONE);
         } else {
-            continueButton.setVisibility(View.VISIBLE);
+            buttonContinue.setVisibility(View.VISIBLE);
         }
     }
 }
