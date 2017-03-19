@@ -18,7 +18,7 @@ public class ScoreboardActivity extends AppCompatActivity {
     private Button buttonSortByScore;
     private Button buttonSortByWords;
     private ArrayAdapter adapter;
-    private ArrayList<String> contents;
+    private ArrayList<String> contents = new ArrayList<>();
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor sharedPreferences_editor;
@@ -30,16 +30,24 @@ public class ScoreboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scoreboard);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        contents = new ArrayList<>();
+        sharedPreferences_editor = sharedPreferences.edit();
 
-
-        String name = sharedPreferences.getString("username", "DEFAULT");
-        contents.add(name);
+        if (sharedPreferences.contains("record")) {
+            String record = sharedPreferences.getString("record", null);
+            String[] recordArr = record.split("\\*");
+            System.out.println(recordArr.length + " array length");
+            if (recordArr != null) {
+                for (String r : recordArr) {
+                    if (r != null && !r.isEmpty()) {
+                        contents.add(r);
+                    }
+                }
+            }
+        }
 
         listView = (ListView) findViewById(R.id.scorelist);
         adapter = new ArrayAdapter<>(this, R.layout.mylist_score, contents);
         listView.setAdapter(adapter);
-
 
 
         buttonSortByScore = (Button) findViewById(R.id.buttonSortByScore);

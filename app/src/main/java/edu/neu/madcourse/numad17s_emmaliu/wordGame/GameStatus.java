@@ -18,6 +18,11 @@ public class GameStatus {
     private static boolean hasRestore;
     private static String TAG = "debuging ";
     private static String username;
+    private static int phase1Score;
+    private static int phase2Score;
+    private static int highestScoreForSingleWord = 0;
+    private static String longestWord;
+    private static String currentDateTime;
 
 
     public static void setRestoreStatus (boolean restore) {
@@ -56,6 +61,42 @@ public class GameStatus {
     public static String getUsername() {
         return username;
     }
+    public static void setPhase1Score(int score) {
+        phase1Score = score;
+    }
+    public static int getPhase1Score() {
+        return phase1Score;
+    }
+    public static void setPhase2Score(int score) {
+        phase2Score = score;
+    }
+    public static int getPhase2Score() {
+        return phase2Score;
+    }
+
+    public static void setHighestScoreForSingleWord(int score) {
+        if (score >= highestScoreForSingleWord) {
+            highestScoreForSingleWord = score;
+        }
+    }
+
+    public static int getHighestScoreForSingleWord() {
+        return highestScoreForSingleWord;
+    }
+    public static void setLongestWord(String word) {
+        longestWord = word;
+    }
+    public static String getLongestWord() {
+        return longestWord;
+    }
+    public static void setCurrentDateTime(String dateTime) {
+        currentDateTime = dateTime;
+    }
+    public static String getCurrentDateTime() {
+        return currentDateTime;
+    }
+
+
 
 
 

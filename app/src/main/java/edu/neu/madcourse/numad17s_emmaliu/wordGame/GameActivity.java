@@ -2,17 +2,26 @@ package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.TimeZone;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import android.util.Log;
+import java.util.Calendar;
 
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
@@ -70,7 +79,8 @@ public class GameActivity extends Activity {
         }else {
             //Log.d("wordGame", "restore = " + restore);
             GameStatus.setScore(0);
-            countDown(90000);
+            //change phase 1 timer
+            countDown(10000);
         }
 
     }
@@ -138,7 +148,7 @@ public class GameActivity extends Activity {
     }
 
     public void countDown(long millisUntilFinished) {
-       //Log.v(TAG , "i am inside timer countDown method");
+        //Log.v(TAG , "i am inside timer countDown method");
 
         countDownTimer = new CountDownTimer(millisUntilFinished, 1000) {
             @Override
@@ -153,11 +163,13 @@ public class GameActivity extends Activity {
                 }
 
             }
+
             @Override
             public void onFinish() {
                 if (!GameStatus.isGameStageTwo) {
                     mGameFragment.startGamestage2();
-                    countDown(60000);
+                    // change phase 2 timer
+                    countDown(10000);
                 } else {
                     mGameFragment.getView().setVisibility(View.GONE);
                     timeView.setVisibility(View.GONE);
@@ -172,8 +184,66 @@ public class GameActivity extends Activity {
                     alertDialog.show();
                     GameStatus.setRestoreStatus(false);
                     homeButton.setVisibility(View.VISIBLE);
+
+
                     GameStatus.setIsGameStageTwo(false);
+
                 }
+            }
+        }.start();
+    }
+
+            private void updateResultToScoreboard() {
+                // dateTime, final score, longestWord, highest word score, phase1, phase2
+                String result = generateRecord();
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(this);
+
+                SharedPreferences.Editor sharedPreferences_editor = sharedPreferences.edit();
+
+                if (!sharedPreferences.contains("record")) {
+                    sharedPreferences_editor.putString("record", result);
+                } else {
+                    String temp = sharedPreferences.getString("record", null);
+                    temp = temp + "***" + result;
+                    sharedPreferences_editor.putString("record", temp);
+                }
+                sharedPreferences_editor.apply();
+            }
+
+            private String generateRecord() {
+                String longestWord = getLongestWord();
+                GameStatus.setLongestWord(longestWord);
+                int longestWordScore = GameStatus.getHighestScoreForSingleWord();
+                int phase1Score = GameStatus.getPhase1Score();
+                int phase2Score = GameStatus.getPhase2Score();
+                int finalScore = GameStatus.getScore();
+
+                String mydate = java.text.DateFormat.getDateTimeInstance().
+                        format(Calendar.getInstance().getTime());
+                GameStatus.setCurrentDateTime(mydate);
+
+                String result = "DateTime: " + mydate + "\n"
+                                + "Phase One Score: " + phase1Score + "\n"
+                                + "Phase Two Score: " + phase2Score + "\n"
+                                + "Total Score: " + finalScore + "\n"
+                                + "Longest Word You Found: " + longestWord +"\n"
+                                + "Score of Longest Word: " +  longestWordScore +"\n";
+
+                return result;
+            }
+
+            private String getLongestWord() {
+                String longestWord = "";
+                HashSet<String> userWords = GameStatus.getReprotWords();
+                if (userWords != null) {
+                    for (String word : userWords) {
+                        if (word.length() > longestWord.length()) {
+                            longestWord = word;
+                        }
+                    }
+                }
+                return longestWord;
             }
 
             private String generateReport() {
@@ -183,6 +253,11 @@ public class GameActivity extends Activity {
                 String[] userWordArr  = userWords.toArray(new String[userWords.size()]);
                 String s2 = convertToString(userWordArr);
                 int score = GameStatus.getScore();
+                // set phase2 score;
+                int phase2Score = score - GameStatus.getPhase1Score();
+                GameStatus.setPhase2Score(phase2Score);
+
+
                 String s3 = getResources().getString(R.string.myScore) + Integer.toString(score);
 
 
@@ -192,9 +267,13 @@ public class GameActivity extends Activity {
                         + s3 + "\n" + "\n"
                         + getResources().getString(R.string.enjoyText);
 
+                updateResultToScoreboard();
+
 
                 return message;
             }
+
+
 
             private  String convertToString(String[] arr) {
                 StringBuilder sb = new StringBuilder();
@@ -207,7 +286,5 @@ public class GameActivity extends Activity {
                 }
                 return sb.toString();
             }
-        }.start();
 
-    }
 }

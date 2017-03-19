@@ -254,7 +254,13 @@ public class GameFragment extends Fragment {
     }
 
     public void startGamestage2() {
+        // change phase
         phase = 2;
+
+        // get phase 1 score and set
+        int mScore = GameStatus.getScore();
+        GameStatus.setPhase1Score(mScore);
+
         GameStatus.setIsGameStageTwo(true);
         removeBackgroundColorForStage2();
         updateAllTiles();
@@ -408,7 +414,7 @@ public class GameFragment extends Fragment {
     }
 
     /**
-     * we can design a lot of rules here to make the game addictive
+     * change score rule to get score
      */
 
     private int increaseScoreForPhaseTwo(String word) {
@@ -425,7 +431,7 @@ public class GameFragment extends Fragment {
             Log.e(TAG, "I am here");
             score += 100;
         }
-
+        GameStatus.setHighestScoreForSingleWord(score);
         return score;
     }
 
@@ -443,6 +449,7 @@ public class GameFragment extends Fragment {
         } else {
             score += 20;
         }
+        GameStatus.setHighestScoreForSingleWord(score);
         return score;
     }
 

@@ -71,10 +71,19 @@ public class MainFragment extends Fragment {
                 String username = s.toString();
                 Log.d(TAG, username);
                 GameStatus.setUsername(username);
-                shared_preferences = PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
+                shared_preferences =
+                        PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
                 shared_preferences_editor = shared_preferences.edit();
-                shared_preferences_editor.putString("username", username);
-                shared_preferences_editor.commit();
+
+
+                if (shared_preferences.getString("username", null) == null) {
+                    shared_preferences_editor.putString("username", username);
+                } else {
+                    String temp = shared_preferences.getString("username", null);
+                    temp = temp + "*" + username;
+                    shared_preferences_editor.putString("username", temp);
+                }
+                shared_preferences_editor.apply();
 
                 System.out.println("username in shared_preferences in afterTextChanged " +
                         shared_preferences.getString("username", "DEFAULT"));
