@@ -2,6 +2,7 @@ package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -35,6 +36,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private int num2 = 0;
     private ArrayList<String> data = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<User> displayedUsers = new ArrayList<>();
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mUsersRef = mRootRef.child("users");
@@ -51,7 +53,24 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         buttonSortByTotalScore = (Button) findViewById(R.id.buttonSortTotoalScore);
         buttonSortBySingleWord = (Button) findViewById(R.id.buttonSortWordScore);
-        
+
+        buttonSortByTotalScore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortByTotalScore(num1);
+                num1++;
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        buttonSortBySingleWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortByLongestWord(num2);
+                num2++;
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -65,8 +84,8 @@ public class LeaderboardActivity extends AppCompatActivity {
                    User user = ds.getValue(User.class);
                    users.add(user);
                }
-                ArrayList<User> temp = getFirst10Users(users);
-                for (User u : temp) {
+                displayedUsers = getFirst10Users(users);
+                for (User u : displayedUsers) {
                     String string = convertUser(u);
                     contents.add(string);
                 }
@@ -100,6 +119,45 @@ public class LeaderboardActivity extends AppCompatActivity {
         return result;
     }
 
+    private void sortByTotalScore(final int num) {
+        Collections.sort(displayedUsers, new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                if ((num & 1) == 0) {
+                    return o1.score - o2.score;
+                } else {
+                    return o2.score - o1.score;
+                }
+            }
+        });
+        contents.clear();
+
+        for (User u : displayedUsers) {
+            String string = convertUser(u);
+            contents.add(string);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void sortByLongestWord(final int num) {
+        Collections.sort(displayedUsers, new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                if ((num & 1) == 0) {
+                    return o1.longestWordScore - o2.longestWordScore;
+                } else {
+                    return o2.longestWordScore - o1.longestWordScore;
+                }
+            }
+        });
+        contents.clear();
+
+        for (User u : displayedUsers) {
+            String string = convertUser(u);
+            contents.add(string);
+        }
+        adapter.notifyDataSetChanged();
+    }
 
 
     private String convertUser (User user) {
@@ -113,21 +171,4 @@ public class LeaderboardActivity extends AppCompatActivity {
         return result;
     }
 
-    private ArrayList<String> getFirstTenData(ArrayList<String> data) {
-        ArrayList<String> result = new ArrayList<>();
-        int size = data.size();
-        if (size <= 10) {
-            result = data;
-        } else {
-            String[] arr = data.toArray(new String[data.size()]);
-            Arrays.sort(arr, new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    return 0;
-                }
-            });
-        }
-
-        return result;
-    }
 }
