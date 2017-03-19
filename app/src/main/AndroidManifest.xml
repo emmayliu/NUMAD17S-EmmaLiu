@@ -54,7 +54,9 @@
         <activity
             android:name=".wordGame.ScoreboardActivity"
             android:label="@string/scoreboard_lable"></activity>
-        <activity android:name=".wordGame.LeaderboardActivity"></activity>
+        <activity
+            android:name=".wordGame.LeaderboardActivity"
+            android:label="@string/Leaderboard"></activity>
     </application>
 
 </manifest>

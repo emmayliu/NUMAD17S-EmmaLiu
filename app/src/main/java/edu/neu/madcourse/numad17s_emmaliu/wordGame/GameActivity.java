@@ -21,10 +21,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import android.util.Log;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Calendar;
 
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
+import edu.neu.madcourse.numad17s_emmaliu.realtimedatabase.models.User;
 
 public class GameActivity extends Activity {
     public static final String KEY_RESTORE = "key_restore";
@@ -40,6 +45,8 @@ public class GameActivity extends Activity {
     public int time;
     public Button restartButton;
     public Button homeButton;
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mUserRef = mRootRef.child("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,9 +275,23 @@ public class GameActivity extends Activity {
                         + getResources().getString(R.string.enjoyText);
 
                 updateResultToScoreboard();
+                updateResultToFirebase();
 
 
                 return message;
+            }
+
+            private void updateResultToFirebase() {
+                if (GameStatus.getUsername() == null || GameStatus.getUsername().length() == 0) {
+                    GameStatus.setUsername("Pikachu");
+                }
+                User user = new User(GameStatus.getToken(), GameStatus.getUsername(),
+                        GameStatus.getScore(), GameStatus.getCurrentDateTime(),
+                        GameStatus.getLongestWord(), GameStatus.getHighestScoreForSingleWord());
+                String dateTime = GameStatus.getCurrentDateTime();
+                mUserRef.child(dateTime).setValue(user);
+                System.out.println("upload to database");
+
             }
 
 

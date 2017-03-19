@@ -12,6 +12,8 @@ import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import edu.neu.madcourse.numad17s_emmaliu.R;
 
 
@@ -34,6 +36,8 @@ public class MainActivity extends Activity {
         gs.stopMusic();
         gs.playMusic(this, R.raw.office);
 
+        String token = FirebaseInstanceId.getInstance().getToken();
+        GameStatus.setToken(token);
 
     }
 

@@ -166,7 +166,7 @@ public class MainFragment extends Fragment {
         buttonLeaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ScoreboardActivity.class);
+                Intent intent = new Intent(getActivity(), LeaderboardActivity.class);
                 getActivity().startActivity(intent);
             }
         });

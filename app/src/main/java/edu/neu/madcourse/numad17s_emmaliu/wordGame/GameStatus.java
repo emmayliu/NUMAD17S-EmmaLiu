@@ -23,6 +23,7 @@ public class GameStatus {
     private static int highestScoreForSingleWord = 0;
     private static String longestWord;
     private static String currentDateTime;
+    private static String token;
 
 
     public static void setRestoreStatus (boolean restore) {
@@ -94,6 +95,12 @@ public class GameStatus {
     }
     public static String getCurrentDateTime() {
         return currentDateTime;
+    }
+    public static void setToken(String mToken) {
+        token = mToken;
+    }
+    public static String getToken() {
+        return token;
     }
 
 
