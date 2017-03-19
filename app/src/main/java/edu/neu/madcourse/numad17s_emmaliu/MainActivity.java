@@ -4,15 +4,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
+import android.widget.Button;
 
 
 public class MainActivity extends AppCompatActivity {
+    Button mTestButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setTitle(R.string.name);
+
+        mTestButton = (Button) findViewById(R.id.buttonTest);
+        mTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, TestActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -35,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
                 edu.neu.madcourse.numad17s_emmaliu.wordGame.MainActivity.class);
         startActivity(intent);
     }
+
+
+
+
 
 
 

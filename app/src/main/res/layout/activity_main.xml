@@ -50,5 +50,11 @@
             android:text="@string/wordGame"
             android:onClick="tic_tac_toe_button_click"/>
 
+        <Button
+            android:text="Test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonTest" />
+
     </LinearLayout>
 </ScrollView>
