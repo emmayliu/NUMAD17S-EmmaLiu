@@ -109,6 +109,8 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 GameStatus.setRestoreStatus(true);
+                GameStatus.setHighestScoreForSingleWord(0);
+                GameStatus.setLongestWord("");
                 Intent intent = new Intent(getActivity(), GameActivity.class);
                 getActivity().startActivity(intent);
             }
