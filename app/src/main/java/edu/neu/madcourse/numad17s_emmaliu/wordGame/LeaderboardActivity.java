@@ -1,5 +1,6 @@
 package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +21,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.neu.madcourse.numad17s_emmaliu.R;
+import edu.neu.madcourse.numad17s_emmaliu.*;
 import edu.neu.madcourse.numad17s_emmaliu.realtimedatabase.models.User;
 
 public class LeaderboardActivity extends AppCompatActivity {
@@ -28,13 +29,13 @@ public class LeaderboardActivity extends AppCompatActivity {
     private ListView listView;
     private Button buttonSortByTotalScore;
     private Button buttonSortBySingleWord;
+    private Button buttonChat;
     private ArrayAdapter adapter;
     private ArrayList<String> contents = new ArrayList<>();
     private int num1 = 0;
     private int num2 = 0;
-    private ArrayList<String> data = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
-    private ArrayList<User> displayedUsers = new ArrayList<>();
+    public ArrayList<User> displayedUsers = new ArrayList<>();
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mUsersRef = mRootRef.child("users");
@@ -44,13 +45,14 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
 
-        listView = (ListView) findViewById(R.id.leadboardlist);
-        adapter = new ArrayAdapter<>(this, R.layout.mylist_leaderboard, contents);
+        listView = (ListView) findViewById(R.id.leadboardList);
+        adapter = new ArrayAdapter<>(LeaderboardActivity.this, R.layout.mylist_leaderboard, contents);
         listView.setAdapter(adapter);
 
 
         buttonSortByTotalScore = (Button) findViewById(R.id.buttonSortTotoalScore);
         buttonSortBySingleWord = (Button) findViewById(R.id.buttonSortWordScore);
+        buttonChat = (Button) findViewById(R.id.buttonSendMessage);
 
         buttonSortByTotalScore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +71,14 @@ public class LeaderboardActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+
+        buttonChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LeaderboardActivity.this, ChatActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -83,6 +93,9 @@ public class LeaderboardActivity extends AppCompatActivity {
                    users.add(user);
                }
                 displayedUsers = getFirst10Users(users);
+                GameStatus.clearDisplayedUser();
+                GameStatus.setDisplayedUser(displayedUsers);
+
                 for (User u : displayedUsers) {
                     String string = convertUser(u);
                     contents.add(string);

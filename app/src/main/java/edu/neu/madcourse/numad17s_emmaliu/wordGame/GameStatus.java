@@ -4,7 +4,10 @@ import android.media.MediaPlayer;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+
+import edu.neu.madcourse.numad17s_emmaliu.realtimedatabase.models.User;
 
 public class GameStatus {
     private static int score = 0;
@@ -24,6 +27,7 @@ public class GameStatus {
     private static String longestWord;
     private static String currentDateTime;
     private static String token;
+    private static ArrayList<User> displayedUser = new ArrayList<>();
 
 
     public static void setRestoreStatus (boolean restore) {
@@ -87,6 +91,16 @@ public class GameStatus {
         if (score >= highestScoreForSingleWord) {
             highestScoreForSingleWord = score;
         }
+    }
+
+    public static void setDisplayedUser(ArrayList<User> users) {
+        displayedUser = users;
+    }
+    public static ArrayList<User> getDisplayedUser() {
+        return displayedUser;
+    }
+    public static void clearDisplayedUser() {
+        displayedUser.clear();;
     }
 
     public static int getHighestScoreForSingleWord() {

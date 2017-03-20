@@ -392,6 +392,7 @@ public class GameActivity extends Activity {
                 if (GameStatus.getUsername() == null || GameStatus.getUsername().length() == 0) {
                     GameStatus.setUsername("Pikachu");
                 }
+
                 User user = new User(GameStatus.getToken(), GameStatus.getUsername(),
                         GameStatus.getScore(), GameStatus.getCurrentDateTime(),
                         GameStatus.getLongestWord(), GameStatus.getHighestScoreForSingleWord());

@@ -63,7 +63,10 @@
             android:label="@string/Leaderboard" />
         <activity
             android:name=".wordGame.NotificationDialog"
-            android:label="@string/WinnerNotification"></activity>
+            android:label="@string/WinnerNotification" />
+        <activity
+            android:name=".wordGame.ChatActivity"
+            android:label="@string/chatLabel"/>
     </application>
 
 </manifest>
