@@ -92,6 +92,9 @@ public class GameStatus {
             highestScoreForSingleWord = score;
         }
     }
+    public static void setHighestScoreToZero() {
+        highestScoreForSingleWord = 0;
+    }
 
     public static void setDisplayedUser(ArrayList<User> users) {
         displayedUser = users;
@@ -112,6 +115,9 @@ public class GameStatus {
     public static String getLongestWord() {
         return longestWord;
     }
+    public static void emptyLongestWord() {
+        longestWord = "";
+    }
     public static void setCurrentDateTime(String dateTime) {
         currentDateTime = dateTime;
     }
@@ -131,6 +137,9 @@ public class GameStatus {
     }
     public static HashSet getReprotWords() {
         return reportWords;
+    }
+    public static void clearReortWords() {
+        reportWords.clear();
     }
     public static void setOriginalWords(String[] words) {
         originalWords = words;

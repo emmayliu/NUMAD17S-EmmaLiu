@@ -2,6 +2,10 @@
     <string name="app_name">NUMAD17S-EmmaLiu</string>
     <string name="displayTest">hello test</string>
 
+    <string name="serverKey">
+        key=AAAAEm4qR9g:APA91bEUpUifDgXaMd1I11FbzzuJkqpWSZ2xd1eemQa5R-JZsEsGCDAL5COgKM0Nk806WjJRa4bTwVwZSyDdy24h2s8Ba6vFqzQlapd7TBGdxkXCtV5QhY1d08X1-8h7WY1edfmzOtvb
+    </string>
+
     <!--button names-->
     <string name="button_about">About</string>
     <string name="button_error">Generate Error</string>
@@ -44,6 +48,7 @@
     <string name="sayCongrats">Say Congrats!</string>
     <string name="chatLabel">Send Message</string>
     <string name="send">Send</string>
+    <string name="winner">Congratulations! You are the winner!</string>
 
 
     <string name="app_name_ttt">UT3</string>

@@ -425,11 +425,9 @@ public class GameFragment extends Fragment {
         if (GameStatus.getReprotWords().contains(word)) {
             Log.e(TAG, "Already have this word in phase 2 or phase1");
             return score;
-        } else if (word.length() == 9) {
-            score += 200;
         } else {
-            Log.e(TAG, "I am here");
-            score += 100;
+            int length = word.length();
+            score = 100 * length;
         }
         GameStatus.setHighestScoreForSingleWord(score);
         return score;
@@ -437,18 +435,8 @@ public class GameFragment extends Fragment {
 
     private int increaseScore(String word) {
         Log.e(TAG, " now increase score for phase1");
+        int score = 100 * word.length();
 
-        int score = 0;
-
-        if (word.length() == 9) {
-            score += 100;
-        } else if (word.length() >= 6) {
-            score += 60;
-        } else if (word.length() >= 4)  {
-            score += 40;
-        } else {
-            score += 20;
-        }
         GameStatus.setHighestScoreForSingleWord(score);
         return score;
     }

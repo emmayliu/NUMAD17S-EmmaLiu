@@ -40,6 +40,5 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         GameStatus.stopMusic();
-        GameStatus.setIsInGame(false);
     }
 }

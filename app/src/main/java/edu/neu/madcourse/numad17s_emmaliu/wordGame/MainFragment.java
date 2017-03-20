@@ -107,8 +107,8 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 GameStatus.setRestoreStatus(true);
-                GameStatus.setHighestScoreForSingleWord(0);
-                GameStatus.setLongestWord("");
+                GameStatus.setHighestScoreToZero();
+                GameStatus.emptyLongestWord();
                 GameStatus.setIsInGame(true);
                 Intent intent = new Intent(getActivity(), GameActivity.class);
                 getActivity().startActivity(intent);
@@ -121,7 +121,11 @@ public class MainFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), GameActivity.class);
                 intent.putExtra(GameActivity.KEY_RESTORE, true);
                 getActivity().startActivity(intent);
+                GameStatus.setIsGameStageTwo(false);
                 GameStatus.setIsInGame(true);
+                GameStatus.clearReortWords();
+                GameStatus.setHighestScoreToZero();
+                GameStatus.emptyLongestWord();
             }
         });
         aboutButton.setOnClickListener(new View.OnClickListener() {

@@ -107,7 +107,7 @@ public class GameActivity extends Activity {
             //Log.d("wordGame", "restore = " + restore);
             GameStatus.setScore(0);
             //change phase 1 timer
-            countDown(10000);
+            countDown(60000);
         }
 
     }
@@ -164,6 +164,7 @@ public class GameActivity extends Activity {
         int num = Integer.valueOf(score);
         GameStatus.setScore(num);
         countDownTimer.cancel();
+        GameStatus.setIsInGame(false);
 
 
 
@@ -192,7 +193,7 @@ public class GameActivity extends Activity {
                 if (!GameStatus.isGameStageTwo) {
                     mGameFragment.startGamestage2();
                     // change phase 2 timer
-                    countDown(10000);
+                    countDown(30000);
                 } else {
                     mGameFragment.getView().setVisibility(View.GONE);
                     timeView.setVisibility(View.GONE);
@@ -210,7 +211,9 @@ public class GameActivity extends Activity {
 
 
                     GameStatus.setIsGameStageTwo(false);
-                    GameStatus.setIsInGame(false);
+//                    GameStatus.clearReortWords();
+//                    GameStatus.setHighestScoreToZero();
+//                    GameStatus.emptyLongestWord();
 
                 }
             }
@@ -368,14 +371,14 @@ public class GameActivity extends Activity {
                     // Read FCM response.
                     InputStream inputStream = conn.getInputStream();
                     final String resp = convertStreamToString(inputStream);
-                    final String toastMessage = "We have a new winner";
+
 
                     Handler h = new Handler(Looper.getMainLooper());
                     h.post(new Runnable() {
                         @Override
                         public void run() {
                             Log.e(TAG, "run: " + resp);
-                            Toast.makeText(GameActivity.this,toastMessage,Toast.LENGTH_LONG).show();
+                            Toast.makeText(GameActivity.this,R.string.winner,Toast.LENGTH_SHORT).show();
                         }
                     });
                 } catch (JSONException | IOException e) {
@@ -400,8 +403,6 @@ public class GameActivity extends Activity {
                 mUserRef.child(dateTime).setValue(user);
 
             }
-
-
 
             private  String convertToString(String[] arr) {
                 StringBuilder sb = new StringBuilder();
