@@ -91,7 +91,7 @@ public class ScoreboardActivity extends AppCompatActivity {
 
                 int score1 = Integer.valueOf(temp1[3].substring(13));
                 int score2 = Integer.valueOf(temp2[3].substring(13));
-                if (num % 2 == 0) {
+                if ((num & 1) == 1) {
                     return score2 - score1;
                 } else {
                     return score1 - score2;
@@ -117,7 +117,7 @@ public class ScoreboardActivity extends AppCompatActivity {
                 int score1 = Integer.valueOf(temp1[5].substring(23));
                 int score2 = Integer.valueOf(temp2[5].substring(23));
 
-                if (num % 2 == 0) {
+                if ((num & 1) == 1) {
                     return score2 - score1;
                 } else {
                     return score1 - score2;

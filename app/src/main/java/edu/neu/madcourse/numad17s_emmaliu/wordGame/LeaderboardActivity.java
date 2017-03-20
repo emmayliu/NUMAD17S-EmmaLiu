@@ -30,8 +30,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     private Button buttonSortBySingleWord;
     private ArrayAdapter adapter;
     private ArrayList<String> contents = new ArrayList<>();
-    private String record;
-    private boolean toggle1 = false;
     private int num1 = 0;
     private int num2 = 0;
     private ArrayList<String> data = new ArrayList<>();
