@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         //subscribe to topic
         FirebaseMessaging.getInstance().subscribeToTopic("TopWinner");
+        System.out.println(" registering");
 
         String token = FirebaseInstanceId.getInstance().getToken();
         GameStatus.setToken(token);

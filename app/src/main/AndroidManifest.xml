@@ -11,11 +11,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
 
         <activity android:name=".MainActivity">
             <intent-filter android:label="@string/app_name">
@@ -59,10 +57,13 @@
 
         <activity
             android:name=".wordGame.ScoreboardActivity"
-            android:label="@string/scoreboard_lable"></activity>
+            android:label="@string/scoreboard_lable" />
         <activity
             android:name=".wordGame.LeaderboardActivity"
-            android:label="@string/Leaderboard"></activity>
+            android:label="@string/Leaderboard" />
+        <activity
+            android:name=".wordGame.NotificationDialog"
+            android:label="@string/WinnerNotification"></activity>
     </application>
 
 </manifest>

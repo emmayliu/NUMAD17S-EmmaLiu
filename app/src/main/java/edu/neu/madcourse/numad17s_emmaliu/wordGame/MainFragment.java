@@ -97,9 +97,7 @@ public class MainFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     GameStatus.stopMusic();
-                    GameStatus.isPlaying = false;
                 } else {
-                    GameStatus.isPlaying = true;
                     GameStatus.playMusic(getActivity(), R.raw.office);
                 }
             }
@@ -111,6 +109,7 @@ public class MainFragment extends Fragment {
                 GameStatus.setRestoreStatus(true);
                 GameStatus.setHighestScoreForSingleWord(0);
                 GameStatus.setLongestWord("");
+                GameStatus.setIsInGame(true);
                 Intent intent = new Intent(getActivity(), GameActivity.class);
                 getActivity().startActivity(intent);
             }
@@ -122,6 +121,7 @@ public class MainFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), GameActivity.class);
                 intent.putExtra(GameActivity.KEY_RESTORE, true);
                 getActivity().startActivity(intent);
+                GameStatus.setIsInGame(true);
             }
         });
         aboutButton.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +180,7 @@ public class MainFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-        // Get rid of the about dialog if it's still up
+        // Get rid of the about NotificationDialog if it's still up
         if (mDialog != null)
             mDialog.dismiss();
     }

@@ -144,11 +144,7 @@ public class GameActivity extends Activity {
         super.onResume();
         GameStatus.mediaPlayer = MediaPlayer.create(this, R.raw.yankee);
         GameStatus.mediaPlayer.setLooping(true);
-
-        if (GameStatus.isPlaying == true) {
-            GameStatus.mediaPlayer.start();
-        }
-
+        GameStatus.mediaPlayer.start();
     }
 
     @Override
@@ -214,6 +210,7 @@ public class GameActivity extends Activity {
 
 
                     GameStatus.setIsGameStageTwo(false);
+                    GameStatus.setIsInGame(false);
 
                 }
             }

@@ -10,7 +10,7 @@ public class GameStatus {
     private static int score = 0;
     private static int timeLeft = 60;
     public static MediaPlayer mediaPlayer;
-    public static boolean isPlaying;
+    public static boolean isInGame;
     public static boolean isGameStageTwo;
     private static long length;
     private static HashSet<String> reportWords = new HashSet<>();
@@ -75,6 +75,14 @@ public class GameStatus {
         return phase2Score;
     }
 
+    public static void setIsInGame(boolean value) {
+        isInGame = value;
+    }
+    public static boolean getIsInGame() {
+        return isInGame;
+    }
+
+
     public static void setHighestScoreForSingleWord(int score) {
         if (score >= highestScoreForSingleWord) {
             highestScoreForSingleWord = score;
@@ -104,9 +112,6 @@ public class GameStatus {
     }
 
 
-
-
-
     public static void addReportWords(String word) {
         reportWords.add(word);
     }
@@ -124,7 +129,6 @@ public class GameStatus {
     }
 
     public static void playMusic (Context context, int music_id) {
-        if (isPlaying) {
             if (mediaPlayer != null) {
                 mediaPlayer.release();
             }
@@ -132,15 +136,11 @@ public class GameStatus {
             mediaPlayer.setVolume(0.5f, 0.5f);
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
-        }
+
     }
 
     protected long getCurrentPosition() {
-        if(isPlaying) {
-            return (mediaPlayer.getCurrentPosition());
-        } else {
-            return -1;
-        }
+        return mediaPlayer.getCurrentPosition();
     }
 
     public static void stopMusic() {
@@ -154,10 +154,6 @@ public class GameStatus {
             mediaPlayer.pause();
             length = getCurrentPosition();
         }
-    }
-
-    public static void startPlaying() {
-        isPlaying = true;
     }
 
 }

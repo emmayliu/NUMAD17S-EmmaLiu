@@ -58,6 +58,10 @@
     <string name="highestSingleWord">Highest Word Score</string>
     <string name="ScoreboardButton">Scoreboard</string>
     <string name="Leaderboard">Leaderboard</string>
+    <string name="dialogLabel">Dialog</string>
+    <string name="close">close</string>
+    <string name="WinnerNotification">Winner Notification</string>
+
      <string name="about_text">\
 This game has two phases. For phase 1, you need to find words in each 3 x 3 grid. The
          letters of words you found will be used for phase 2\n\
@@ -80,4 +84,5 @@ Discussed assignment requirement with Yudong Wang, Enting Wu, Xueyi Gu.
     <string name="enjoyText">Hope you enjoy this game!</string>
     <string name="usernameHint">Enter username</string>
 
+    <string name="dialogMessage">We have a new winner!  \n\ Check the Leaderboard </string>
 </resources>

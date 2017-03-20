@@ -1,5 +1,6 @@
 package edu.neu.madcourse.numad17s_emmaliu.fcm;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,6 +9,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.content.Context;
+import android.view.View;
+import android.widget.Button;
+
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -15,9 +20,10 @@ import com.google.firebase.messaging.RemoteMessage;
 //import edu.neu.madcourse.lecture6.firebasedemo.MainActivity;
 //import edu.neu.madcourse.lecture6.firebasedemo.R;
 
-import edu.neu.madcourse.numad17s_emmaliu.MainActivity;
 import edu.neu.madcourse.numad17s_emmaliu.R;
+import edu.neu.madcourse.numad17s_emmaliu.wordGame.GameStatus;
 import edu.neu.madcourse.numad17s_emmaliu.wordGame.LeaderboardActivity;
+import edu.neu.madcourse.numad17s_emmaliu.wordGame.NotificationDialog;
 
 
 public class WordGameMessagingService extends FirebaseMessagingService {
@@ -54,10 +60,20 @@ public class WordGameMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
 
+            if (GameStatus.isInGame) {
+                sendNotification(remoteMessage.getNotification().getBody());
+                Log.d(TAG, "send background");
+            } else {
+                Log.d(TAG, " should be NotificationDialog");
+                Intent intent = new Intent(WordGameMessagingService.this, NotificationDialog.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+
 
             // Note: We happen to be just getting the body of the notification and displaying it.
             // We could also get the title and other info and do different things.
-            sendNotification(remoteMessage.getNotification().getBody());
+
         }
 
     }
@@ -74,7 +90,7 @@ public class WordGameMessagingService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
