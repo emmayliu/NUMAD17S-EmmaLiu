@@ -6,6 +6,12 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.Button;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import edu.neu.madcourse.numad17s_emmaliu.wordGame.GameStatus;
+
 
 public class MainActivity extends AppCompatActivity {
     Button mTestButton;
@@ -24,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //subscribe to topic
+        FirebaseMessaging.getInstance().subscribeToTopic("TopWinner");
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+        GameStatus.setToken(token);
+
 
     }
 

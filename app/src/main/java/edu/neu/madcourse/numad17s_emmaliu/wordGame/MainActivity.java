@@ -36,9 +36,6 @@ public class MainActivity extends Activity {
         gs.stopMusic();
         gs.playMusic(this, R.raw.office);
 
-        String token = FirebaseInstanceId.getInstance().getToken();
-        GameStatus.setToken(token);
-
     }
 
     @Override

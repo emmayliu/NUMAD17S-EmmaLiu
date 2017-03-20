@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
@@ -17,15 +18,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Scanner;
 
 
 import edu.neu.madcourse.numad17s_emmaliu.R;
@@ -47,6 +61,12 @@ public class GameActivity extends Activity {
     public Button homeButton;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mUserRef = mRootRef.child("users");
+    private String TAG = "TestFCM";
+
+    private static final String SERVER_KEY =
+            "key=AAAAEm4qR9g:APA91bEUpUifDgXaMd1I11FbzzuJkqpWSZ2xd1eemQa5R-JZsEsGCDAL5COgKM0Nk806WjJRa4bTwVwZSyDdy24h2s8Ba6vFqzQlapd7TBGdxkXCtV5QhY1d08X1-8h7WY1edfmzOtvb";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,10 +295,100 @@ public class GameActivity extends Activity {
                         + getResources().getString(R.string.enjoyText);
 
                 updateResultToScoreboard();
+                competeWithTopWinner();
                 updateResultToFirebase();
 
-
                 return message;
+            }
+
+            private void competeWithTopWinner() {
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                Query query = db.child("users").orderByChild("score").limitToLast(1);
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            User firstWinner = new User();
+                            Log.d(TAG, dataSnapshot.toString());
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                firstWinner = ds.getValue(User.class);
+                            }
+                            if (firstWinner.score <= GameStatus.getScore()) {
+                                Log.d(TAG, " now first winner changed");
+                                sentNotificationToAll();
+                            } else {
+                                Log.d(TAG, " you will win next time");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            private void sentNotificationToAll() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendMessageToTopic();
+                    }
+                }).start();
+            }
+
+            private void sendMessageToTopic() {
+                JSONObject jPayload = new JSONObject();
+                JSONObject jNotification = new JSONObject();
+                try {
+                    jNotification.put("message", "Top Winner Topic");
+                    jNotification.put("body", "We have a new Winner");
+                    jNotification.put("sound", "default");
+                    jNotification.put("badge", "1");
+                    jNotification.put("click_action", "OPEN_ACTIVITY_1");
+
+                    // Populate the Payload object.
+                    // Note that "to" is a topic, not a token representing an app instance
+                    jPayload.put("to", "/topics/TopWinner");
+                    jPayload.put("priority", "high");
+                    jPayload.put("notification", jNotification);
+
+                    // Open the HTTP connection and send the payload
+                    URL url = new URL("https://fcm.googleapis.com/fcm/send");
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Authorization", SERVER_KEY);
+                    conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setDoOutput(true);
+
+                    // Send FCM message content.
+                    OutputStream outputStream = conn.getOutputStream();
+                    outputStream.write(jPayload.toString().getBytes());
+                    outputStream.close();
+
+                    // Read FCM response.
+                    InputStream inputStream = conn.getInputStream();
+                    final String resp = convertStreamToString(inputStream);
+                    final String toastMessage = "We have a new winner";
+
+                    Handler h = new Handler(Looper.getMainLooper());
+                    h.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.e(TAG, "run: " + resp);
+                            Toast.makeText(GameActivity.this,toastMessage,Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            private String convertStreamToString(InputStream is) {
+                Scanner s = new Scanner(is).useDelimiter("\\A");
+                return s.hasNext() ? s.next().replace(",", ",\n") : "";
             }
 
             private void updateResultToFirebase() {
@@ -290,7 +400,6 @@ public class GameActivity extends Activity {
                         GameStatus.getLongestWord(), GameStatus.getHighestScoreForSingleWord());
                 String dateTime = GameStatus.getCurrentDateTime();
                 mUserRef.child(dateTime).setValue(user);
-                System.out.println("upload to database");
 
             }
 

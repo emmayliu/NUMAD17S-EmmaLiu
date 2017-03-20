@@ -17,6 +17,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import edu.neu.madcourse.numad17s_emmaliu.MainActivity;
 import edu.neu.madcourse.numad17s_emmaliu.R;
+import edu.neu.madcourse.numad17s_emmaliu.wordGame.LeaderboardActivity;
 
 
 public class WordGameMessagingService extends FirebaseMessagingService {
@@ -69,7 +70,7 @@ public class WordGameMessagingService extends FirebaseMessagingService {
      */
     private void sendNotification(String messageBody) {
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LeaderboardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
