@@ -11,6 +11,8 @@ package edu.neu.madcourse.numad17s_emmaliu.wordGame;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -19,13 +21,28 @@ import edu.neu.madcourse.numad17s_emmaliu.R;
 
 public class MainActivity extends Activity {
     MediaPlayer mMediaPlayer;
-    // ...
+    Switch mSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        GameStatus.setIsMusicPlaying(true);
+        mSwitch = (Switch) findViewById(R.id.switch1);
 
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    GameStatus.stopMusic();
+                    GameStatus.setIsMusicPlaying(false);
+                } else {
+                    GameStatus.setIsMusicPlaying(true);
+                    GameStatus.playMusic(MainActivity.this, R.raw.office);
+
+                }
+            }
+        });
     }
 
     @Override

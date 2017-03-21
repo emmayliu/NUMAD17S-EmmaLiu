@@ -48,7 +48,7 @@
             android:id="@+id/button4"
             android:textSize="14sp"
             android:text="@string/wordGame"
-            android:onClick="tic_tac_toe_button_click"/>
+            android:onClick="word_game_button_click"/>
 
         <Button
             android:text="Test"

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        mTestButton.setVisibility(View.INVISIBLE);
 
         //subscribe to topic
         FirebaseMessaging.getInstance().subscribeToTopic("TopWinner");
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void tic_tac_toe_button_click(View view) {
+    public void word_game_button_click(View view) {
         Intent intent = new Intent(MainActivity.this,
                 edu.neu.madcourse.numad17s_emmaliu.wordGame.MainActivity.class);
         startActivity(intent);

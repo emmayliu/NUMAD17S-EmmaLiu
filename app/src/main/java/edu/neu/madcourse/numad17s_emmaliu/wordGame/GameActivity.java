@@ -142,9 +142,7 @@ public class GameActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        GameStatus.mediaPlayer = MediaPlayer.create(this, R.raw.yankee);
-        GameStatus.mediaPlayer.setLooping(true);
-        GameStatus.mediaPlayer.start();
+        GameStatus.playMusic(this, R.raw.yankee);
     }
 
     @Override
@@ -153,7 +151,7 @@ public class GameActivity extends Activity {
         mHandler.removeCallbacks(null);
         String gameData = mGameFragment.getState();
 
-        GameStatus.mediaPlayer.pause();
+        GameStatus.stopMusic();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
                 .apply();
@@ -250,12 +248,18 @@ public class GameActivity extends Activity {
                         format(Calendar.getInstance().getTime());
                 GameStatus.setCurrentDateTime(mydate);
 
-                String result = "DateTime: " + mydate + "\n"
-                                + "Phase One Score: " + phase1Score + "\n"
-                                + "Phase Two Score: " + phase2Score + "\n"
-                                + "Total Score: " + finalScore + "\n"
-                                + "Longest Word You Found: " + longestWord +"\n"
-                                + "Score of Longest Word: " +  longestWordScore +"\n";
+                String result = getResources().getString(R.string.recoredDateTime)
+                                + mydate + "\n"
+                                + getResources().getString(R.string.recordPhaseOneScore)
+                                + phase1Score + "\n"
+                                + getResources().getString(R.string.recordPhaseTwoScore)
+                                + phase2Score + "\n"
+                                + getResources().getString(R.string.recordTotalScore)
+                                + finalScore + "\n"
+                                + getResources().getString(R.string.recordLongestWord)
+                                + longestWord +"\n"
+                                + getResources().getString(R.string.recordHighestWord)
+                                +  longestWordScore +"\n";
 
                 return result;
             }

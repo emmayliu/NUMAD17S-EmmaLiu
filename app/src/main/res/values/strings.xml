@@ -93,4 +93,12 @@ Discussed assignment requirement with Yudong Wang, Enting Wu, Xueyi Gu.
     <string name="usernameHint">Enter username</string>
 
     <string name="dialogMessage">We have a new winner!</string>
+
+    <string name="recoredDateTime">DateTime: </string>
+    <string name="recordPhaseOneScore">Phase One Score: </string>
+    <string name="recordPhaseTwoScore">Phase Two Score: </string>
+    <string name="recordTotalScore">Total Score: </string>
+    <string name="recordLongestWord">Longest Word You Found: </string>
+    <string name="recordHighestWord">Score of Longest Word: </string>
+
 </resources>

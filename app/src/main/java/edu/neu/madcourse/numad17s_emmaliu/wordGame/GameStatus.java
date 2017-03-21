@@ -28,6 +28,7 @@ public class GameStatus {
     private static String currentDateTime;
     private static String token;
     private static ArrayList<User> displayedUser = new ArrayList<>();
+    private static boolean isMusicPlaying;
 
 
     public static void setRestoreStatus (boolean restore) {
@@ -103,7 +104,7 @@ public class GameStatus {
         return displayedUser;
     }
     public static void clearDisplayedUser() {
-        displayedUser.clear();;
+        displayedUser.clear();
     }
 
     public static int getHighestScoreForSingleWord() {
@@ -130,6 +131,12 @@ public class GameStatus {
     public static String getToken() {
         return token;
     }
+    public static void setIsMusicPlaying(boolean value) {
+        isMusicPlaying = value;
+    }
+    public static boolean getIsMusicPlaying() {
+        return isMusicPlaying;
+    }
 
 
     public static void addReportWords(String word) {
@@ -152,13 +159,15 @@ public class GameStatus {
     }
 
     public static void playMusic (Context context, int music_id) {
-            if (mediaPlayer != null) {
-                mediaPlayer.release();
+            if (isMusicPlaying) {
+                if (mediaPlayer != null) {
+                    mediaPlayer.release();
+                }
+                mediaPlayer = MediaPlayer.create(context, music_id);
+                mediaPlayer.setVolume(0.5f, 0.5f);
+                mediaPlayer.setLooping(true);
+                mediaPlayer.start();
             }
-            mediaPlayer = MediaPlayer.create(context, music_id);
-            mediaPlayer.setVolume(0.5f, 0.5f);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
 
     }
 

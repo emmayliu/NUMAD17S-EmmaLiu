@@ -49,7 +49,7 @@ public class MainFragment extends Fragment {
         buttonContinue = rootView.findViewById(R.id.continue_button);
         View aboutButton = rootView.findViewById(R.id.about_button);
         View acknowledgeButton = rootView.findViewById(R.id.acknowledge1);
-        Switch mySwitch = (Switch) rootView.findViewById(R.id.switch1);
+//        Switch mySwitch = (Switch) rootView.findViewById(R.id.switch1);
         EditText editTextUsername = (EditText) rootView.findViewById(R.id.editTextUsername);
         buttonScoreboard = (Button) rootView.findViewById(R.id.buttonScoreboard);
         buttonLeaderboard = (Button) rootView.findViewById(R.id.buttonLeaderboard);
@@ -91,17 +91,17 @@ public class MainFragment extends Fragment {
 
         });
 
-        //mySwitch.setChecked(false);
-        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    GameStatus.stopMusic();
-                } else {
-                    GameStatus.playMusic(getActivity(), R.raw.office);
-                }
-            }
-        });
+//        //mySwitch.setChecked(false);
+//        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    GameStatus.stopMusic();
+//                } else {
+//                    GameStatus.playMusic(getActivity(), R.raw.office);
+//                }
+//            }
+//        });
 
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +110,10 @@ public class MainFragment extends Fragment {
                 GameStatus.setHighestScoreToZero();
                 GameStatus.emptyLongestWord();
                 GameStatus.setIsInGame(true);
+                GameStatus.setIsGameStageTwo(false);
+                GameStatus.clearReortWords();
+                GameStatus.setHighestScoreToZero();
+                GameStatus.emptyLongestWord();
                 Intent intent = new Intent(getActivity(), GameActivity.class);
                 getActivity().startActivity(intent);
             }
@@ -121,11 +125,7 @@ public class MainFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), GameActivity.class);
                 intent.putExtra(GameActivity.KEY_RESTORE, true);
                 getActivity().startActivity(intent);
-                GameStatus.setIsGameStageTwo(false);
                 GameStatus.setIsInGame(true);
-                GameStatus.clearReortWords();
-                GameStatus.setHighestScoreToZero();
-                GameStatus.emptyLongestWord();
             }
         });
         aboutButton.setOnClickListener(new View.OnClickListener() {
