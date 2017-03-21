@@ -369,7 +369,7 @@ public class GameActivity extends Activity {
                     outputStream.write(jPayload.toString().getBytes());
                     outputStream.close();
 
-                    // Read FCM response.
+                     //Read FCM response.
                     InputStream inputStream = conn.getInputStream();
                     final String resp = convertStreamToString(inputStream);
 
