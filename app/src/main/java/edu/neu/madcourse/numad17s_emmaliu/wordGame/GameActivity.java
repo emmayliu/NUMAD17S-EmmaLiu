@@ -312,13 +312,14 @@ public class GameActivity extends Activity {
                             Log.d(TAG, dataSnapshot.toString());
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                 firstWinner = ds.getValue(User.class);
+                                if (firstWinner.score <= GameStatus.getScore()) {
+                                    Log.d(TAG, " now first winner changed");
+                                    sentNotificationToAll();
+                                } else {
+                                    Log.d(TAG, " you will win next time");
+                                }
                             }
-                            if (firstWinner.score <= GameStatus.getScore()) {
-                                Log.d(TAG, " now first winner changed");
-                                sentNotificationToAll();
-                            } else {
-                                Log.d(TAG, " you will win next time");
-                            }
+
                         }
                     }
 

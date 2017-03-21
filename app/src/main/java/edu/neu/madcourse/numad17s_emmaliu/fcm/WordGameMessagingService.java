@@ -38,6 +38,7 @@ public class WordGameMessagingService extends FirebaseMessagingService {
     // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.e(TAG, " on MessageReceived get called");
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages are handled
         // here in onMessageReceived whether the app is in the foreground or background. Data messages are the type
@@ -64,7 +65,6 @@ public class WordGameMessagingService extends FirebaseMessagingService {
 
 
             if (remoteMessage.getNotification().getTitle() == null) {
-                System.out.println(GameStatus.getIsInGame() + "  is in game");
                 if (GameStatus.getIsInGame()) {
                     sendNotification(remoteMessage.getNotification().getBody());
                     Log.d(TAG, "send background");
