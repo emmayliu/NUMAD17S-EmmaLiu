@@ -5,31 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="@string/dialogMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="95dp"
-        android:id="@+id/TextViewDialog"
-        android:textSize="18sp"
-        android:textStyle="normal|bold"
-        android:textAlignment="viewStart"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="69dp"
-        android:textColor="@color/available_color" />
-
     <!--try to navigate user from NotificationDialog to leaderboard but fail;-->
-    <Button
-        android:text="@string/Leaderboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="52dp"
-        android:id="@+id/buttonToLeaderboard"
-        android:layout_below="@+id/TextViewDialog"
-        android:layout_alignParentStart="true"
-        android:onClick="goToLeaderboard"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -41,4 +17,28 @@
         android:layout_alignBaseline="@+id/buttonToLeaderboard"
         android:layout_alignBottom="@+id/buttonToLeaderboard"
         android:layout_toEndOf="@+id/buttonToLeaderboard" />
+
+    <TextView
+        android:text="@string/dialogMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextViewDialog"
+        android:textSize="18sp"
+        android:textStyle="normal|bold"
+        android:textAlignment="viewStart"
+        android:textColor="@color/available_color"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="28dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="@string/Leaderboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:id="@+id/buttonToLeaderboard"
+        android:onClick="goToLeaderboard"
+        android:layout_below="@+id/TextViewDialog"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

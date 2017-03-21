@@ -92,5 +92,5 @@ Discussed assignment requirement with Yudong Wang, Enting Wu, Xueyi Gu.
     <string name="enjoyText">Hope you enjoy this game!</string>
     <string name="usernameHint">Enter username</string>
 
-    <string name="dialogMessage">We have a new winner!  \n\ Check the Leaderboard </string>
+    <string name="dialogMessage">We have a new winner!</string>
 </resources>

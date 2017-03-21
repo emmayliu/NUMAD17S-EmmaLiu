@@ -63,7 +63,8 @@
             android:label="@string/Leaderboard" />
         <activity
             android:name=".wordGame.NotificationDialog"
-            android:label="@string/WinnerNotification" />
+            android:label="@string/WinnerNotification"
+            android:theme="@android:style/Theme.Dialog"/>
         <activity
             android:name=".wordGame.ChatActivity"
             android:label="@string/chatLabel"/>
